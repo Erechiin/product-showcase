@@ -17,6 +17,10 @@ class Product(ABC):
         stat_label="Atributo",
         stat_value="Padrão",
         lore="",
+        villager_id="armeiro",
+        villager_name="Ferreiro Gorak",
+        villager_role="Mestre Armeiro",
+        dimension="overworld",
     ):
         self.item_id = item_id
         self.name = name
@@ -29,6 +33,10 @@ class Product(ABC):
         self.stat_label = stat_label
         self.stat_value = stat_value
         self.lore = lore or description
+        self.villager_id = villager_id
+        self.villager_name = villager_name
+        self.villager_role = villager_role
+        self.dimension = dimension
 
     @property
     def price(self):

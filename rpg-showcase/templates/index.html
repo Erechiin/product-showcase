@@ -9,16 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <!-- SVG Definitions for Pixel Art Icons (Emerald & Chest) -->
+<body class="theme-overworld">
+    <!-- SVG Definition for Pixel Art Chest Icon -->
     <svg width="0" height="0" class="visually-hidden" aria-hidden="true">
         <defs>
-            <symbol id="icon-emerald" viewBox="0 0 16 16">
-                <path fill="#005216" d="M6 1h4v1h2v2h1v2h1v4h-1v2h-1v2h-2v1H6v-1H4v-2H3v-2H2V6h1V4h1V2h2V1z"/>
-                <path fill="#17dd62" d="M6 2h4v1h2v2h1v6h-1v2h-2v1H6v-1H4v-2H3V5h1V3h2V2z"/>
-                <path fill="#84f5a7" d="M6 3h2v1H6V3zm-1 1h1v2H5V4zm-1 2h1v4H4V6z"/>
-                <path fill="#0bb349" d="M8 4h2v2h1v4h-1v2H6v-1h3V9h1V6H9V5H8V4z"/>
-            </symbol>
             <symbol id="icon-chest" viewBox="0 0 16 16">
                 <path fill="#1f1409" d="M1 2h14v12H1V2z"/>
                 <path fill="#a36c2b" d="M2 3h12v4H2V3zm0 5h12v5H2V8z"/>
@@ -29,29 +23,66 @@
         </defs>
     </svg>
 
-    <!-- Header / Navbar -->
+    <!-- Top Interactive Navbar: Dimensions + Villager Profiles + Chest -->
+    <nav class="mc-top-navbar" aria-label="Navegação Principal da Loja">
+        <div class="container top-nav-inner">
+            <!-- Left: Home + Dimension Switcher -->
+            <div class="nav-group">
+                <button type="button" class="nav-btn nav-home-btn active" id="nav-home-btn">
+                    🏠 Praça da Vila
+                </button>
+
+                <div class="dimension-switcher" role="group" aria-label="Seletor de Dimensão">
+                    <span class="nav-group-label">Dimensão:</span>
+                    <button type="button" class="dim-btn active" data-dimension="overworld">
+                        ☀️ Overworld
+                    </button>
+                    <button type="button" class="dim-btn dim-btn-nether" data-dimension="nether">
+                        🔥 Nether
+                    </button>
+                    <button type="button" class="dim-btn" data-dimension="todas">
+                        🌍 Todas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Center: Villager Profiles Quick Menu -->
+            <div class="nav-group villager-nav-group" role="group" aria-label="Perfis dos Villagers">
+                <span class="nav-group-label">Villagers:</span>
+                {% for v_id, v in villagers.items() %}
+                <button type="button"
+                        class="villager-nav-btn"
+                        data-villager-id="{{ v.id }}"
+                        title="Visitar oficina de {{ v.nome }} ({{ v.profissao }})">
+                    <span>{{ v.icone }}</span>
+                    <span>{{ v.nome }}</span>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Banner -->
     <header class="header">
         <div class="container navbar">
             <div class="brand">
-                <p class="eyebrow">MERCADO DO VILAREJO · OVERWORLD</p>
-                <h1>{{ showcase_name }}</h1>
-                <p class="introduction">{{ showcase_description }}</p>
+                <p class="eyebrow" id="header-eyebrow">MERCADO DO VILAREJO · OVERWORLD</p>
+                <h1 id="header-title">{{ showcase_name }}</h1>
+                <p class="introduction" id="header-desc">{{ showcase_description }}</p>
             </div>
 
             <button type="button" class="chest-btn" id="open-cart-btn" aria-label="Abrir Baú de Compras">
                 <span class="chest-slot">
-                    <svg class="pixel-icon chest-icon" width="32" height="32">
+                    <svg class="pixel-icon chest-icon" width="34" height="34">
                         <use href="#icon-chest"></use>
                     </svg>
                     <span class="stack-badge" id="cart-count-badge">0</span>
                 </span>
                 <span class="chest-info">
-                    <span class="chest-label">Baú de Itens</span>
+                    <span class="chest-label">Abrir Baú</span>
                     <span class="chest-total">
-                        <svg class="pixel-icon emerald-icon" width="16" height="16">
-                            <use href="#icon-emerald"></use>
-                        </svg>
-                        <span id="header-emerald-total">0</span>
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="18" height="18" class="emerald-icon">
+                        <span id="header-emerald-total">0</span> Esm.
                     </span>
                 </span>
             </button>
@@ -59,11 +90,46 @@
     </header>
 
     <main class="container">
+        <!-- Dynamic Villager Profile View Banner (Hidden until a Villager is selected) -->
+        <section class="villager-profile-card" id="villager-profile-banner" hidden aria-live="polite">
+            <div class="villager-profile-top">
+                <div class="villager-avatar-box" id="vp-icon">⚒️</div>
+                <div class="villager-profile-main">
+                    <div class="villager-badges">
+                        <span class="vp-badge vp-level" id="vp-level">Nível 5 · Mestre</span>
+                        <span class="vp-badge vp-dimension" id="vp-dimension">Overworld</span>
+                    </div>
+                    <h2 id="vp-name">Ferreiro Gorak</h2>
+                    <p class="vp-role" id="vp-role">Mestre Armeiro & Ferramenteiro</p>
+                </div>
+                <button type="button" class="mc-btn mc-btn-secondary" id="back-to-plaza-btn">
+                    ← Voltar à Praça da Vila
+                </button>
+            </div>
+
+            <p class="vp-quote" id="vp-quote"></p>
+
+            <div class="villager-profile-stats">
+                <div class="vp-stat-box">
+                    <span class="vp-stat-label">Bloco de Trabalho:</span>
+                    <strong id="vp-workstation">Bigorna & Alto-Forno</strong>
+                </div>
+                <div class="vp-stat-box">
+                    <span class="vp-stat-label">Especialidade da Oficina:</span>
+                    <strong id="vp-specialty">Armas e Ferramentas</strong>
+                </div>
+            </div>
+        </section>
+
         <section aria-labelledby="products-title">
             <div class="section-heading">
                 <div class="inventory-bar">
-                    <h2 id="products-title">Inventário do Mercador</h2>
-                    <p>Selecione uma categoria nos slots abaixo para filtrar os itens da vitrine.</p>
+                    <div class="inventory-bar-top">
+                        <div>
+                            <h2 id="products-title">Bancada de Itens da Vila</h2>
+                            <p id="products-subtitle">Mostrando itens da dimensão <strong>Overworld</strong>. Clique em qualquer item ou Villager para explorar!</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Category Filters styled as Inventory Slots -->
@@ -71,22 +137,18 @@
                     <button type="button" class="slot-tab active" data-filter="todos" role="tab" aria-selected="true">
                         <span class="slot-tab-code">[1]</span>
                         <span>Todos</span>
-                        <span class="slot-count">x{{ products|length }}</span>
                     </button>
                     <button type="button" class="slot-tab" data-filter="armas" role="tab" aria-selected="false">
                         <span class="slot-tab-code">[2]</span>
-                        <span>Armas</span>
-                        <span class="slot-count">x2</span>
+                        <span>Armas & Ferramentas</span>
                     </button>
                     <button type="button" class="slot-tab" data-filter="blocos" role="tab" aria-selected="false">
                         <span class="slot-tab-code">[3]</span>
-                        <span>Blocos</span>
-                        <span class="slot-count">x2</span>
+                        <span>Blocos & Recursos</span>
                     </button>
                     <button type="button" class="slot-tab" data-filter="alquimia" role="tab" aria-selected="false">
                         <span class="slot-tab-code">[4]</span>
-                        <span>Consumíveis</span>
-                        <span class="slot-count">x2</span>
+                        <span>Poções & Consumíveis</span>
                     </button>
                 </div>
             </div>
@@ -108,17 +170,23 @@
                          data-description="{{ product.description }}"
                          data-lore="{{ product.lore }}"
                          data-delivery="{{ product.delivery() }}"
-                         data-image="{{ url_for('static', filename='images/' ~ product.image) }}">
+                         data-villager-id="{{ product.villager_id }}"
+                         data-villager-name="{{ product.villager_name }}"
+                         data-villager-role="{{ product.villager_role }}"
+                         data-dimension="{{ product.dimension }}"
+                         data-image="/static/images/{{ product.image }}">
 
                         <div class="card-top-bar">
                             <span class="category-tag">{{ product.category_name }}</span>
-                            <span class="id-tag">#0{{ product.item_id }}</span>
+                            <span class="dimension-tag dim-tag-{{ product.dimension }}">
+                                {{ '🔥 Nether' if product.dimension == 'nether' else '☀️ Overworld' }}
+                            </span>
                         </div>
 
                         <!-- Sprite Slot -->
                         <div class="sprite-slot" role="button" tabindex="0" aria-label="Ver detalhes de {{ product.name }}">
-                            <img src="{{ url_for('static', filename='images/' ~ product.image) }}"
-                                 alt="Image of {{ product.name }}" width="640" height="480" class="sprite-img">
+                            <img src="/static/images/{{ product.image }}"
+                                 alt="Image of {{ product.name }}" width="160" height="160" class="sprite-img">
                             <span class="stack-badge" title="Limite máximo por stack">x{{ product.stack }}</span>
                         </div>
 
@@ -132,12 +200,20 @@
 
                             <p class="description">{{ product.description }}</p>
 
+                            <!-- Clickable Villager Craftsman Chip on Card -->
+                            <button type="button"
+                                    class="card-villager-chip open-villager-btn"
+                                    data-villager-id="{{ product.villager_id }}"
+                                    title="Ver perfil e mais itens feitos por {{ product.villager_name }}">
+                                <span class="chip-label">Artesão:</span>
+                                <strong>{{ product.villager_name }}</strong>
+                                <span class="chip-arrow">Ver perfil →</span>
+                            </button>
+
                             <!-- Emerald Price + BRL Reference -->
                             <div class="price-box">
                                 <div class="emerald-price">
-                                    <svg class="pixel-icon emerald-icon" width="22" height="22">
-                                        <use href="#icon-emerald"></use>
-                                    </svg>
+                                    <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="22" height="22" class="emerald-icon">
                                     <span class="emerald-amount">{{ product.emerald_price() }}</span>
                                     <span class="emerald-unit">Esmeraldas</span>
                                 </div>
@@ -162,7 +238,7 @@
         </section>
     </main>
 
-    <!-- Item Details Modal (Minecraft Enchanted Tooltip Style) -->
+    <!-- Item Details Modal (Minecraft Enchanted Tooltip Style + Villager Profile Link) -->
     <div class="mc-modal-backdrop" id="item-modal" hidden>
         <div class="mc-tooltip-modal" role="dialog" aria-modal="true" aria-labelledby="modal-item-name">
             <div class="mc-tooltip-header">
@@ -174,9 +250,7 @@
                     <span class="mc-tooltip-category" id="modal-item-category">Categoria</span>
                     <h3 id="modal-item-name">Nome do Item</h3>
                     <div class="mc-tooltip-price">
-                        <svg class="pixel-icon emerald-icon" width="18" height="18">
-                            <use href="#icon-emerald"></use>
-                        </svg>
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="18" height="18" class="emerald-icon">
                         <span id="modal-item-price">0</span> Esmeraldas
                     </div>
                 </div>
@@ -191,6 +265,18 @@
                 <p class="mc-lore-text" id="modal-item-lore"></p>
                 <p class="mc-desc-text" id="modal-item-desc"></p>
                 <p class="mc-delivery-text" id="modal-item-delivery"></p>
+
+                <!-- Villager Creator Profile Box inside Item Details Modal -->
+                <div class="modal-villager-box">
+                    <div class="modal-villager-info">
+                        <span class="modal-villager-eyebrow">CRIADO / VENDIDO PELO VILLAGER:</span>
+                        <strong id="modal-villager-name">Ferreiro Gorak</strong>
+                        <span id="modal-villager-role">Mestre Armeiro & Ferramenteiro</span>
+                    </div>
+                    <button type="button" class="mc-btn mc-btn-villager" id="modal-visit-villager-btn">
+                        Ver Oficina & Mais Itens →
+                    </button>
+                </div>
             </div>
 
             <div class="mc-tooltip-footer">
@@ -205,10 +291,10 @@
         <div class="mc-inventory-window" role="dialog" aria-modal="true" aria-labelledby="cart-modal-title">
             <div class="mc-window-header">
                 <div class="mc-window-title">
-                    <svg class="pixel-icon" width="24" height="24">
+                    <svg class="pixel-icon" width="26" height="26">
                         <use href="#icon-chest"></use>
                     </svg>
-                    <h3 id="cart-modal-title">Baú de Trocas do Jogador</h3>
+                    <h3 id="cart-modal-title">Baú de Trocas do Vilarejo</h3>
                 </div>
                 <button type="button" class="mc-close-btn" id="close-cart-modal" aria-label="Fechar Baú">X</button>
             </div>
@@ -222,8 +308,8 @@
                 <ul class="cart-item-list" id="cart-items-list" hidden></ul>
 
                 <div class="trade-banner" id="trade-feedback" hidden>
-                    <strong>Troca realizada com sucesso! (Hmmm!)</strong>
-                    <p>O Aldeão recebeu suas Esmeraldas e enviou os itens para o seu inventário.</p>
+                    <strong>Troca realizada com sucesso! (Level Up!)</strong>
+                    <p>Suas Esmeraldas foram trocadas e os itens foram enviados para o seu inventário!</p>
                 </div>
             </div>
 
@@ -231,9 +317,7 @@
                 <div class="cart-summary">
                     <span>Total da Troca:</span>
                     <strong class="cart-total-emeralds">
-                        <svg class="pixel-icon emerald-icon" width="20" height="20">
-                            <use href="#icon-emerald"></use>
-                        </svg>
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="20" height="20" class="emerald-icon">
                         <span id="cart-total-value">0</span> Esmeraldas
                     </strong>
                 </div>
@@ -251,18 +335,57 @@
     <div class="mc-toast" id="mc-toast" role="status" aria-live="polite" hidden></div>
 
     <footer class="footer container">
-        <p>Created by {{ author_name }} · MineShop Inventory UI · A learning project</p>
+        <p>Created by {{ author_name }} · MineShop Village Market · A learning project</p>
     </footer>
 
     <script>
         (function () {
+            const VILLAGERS_DATA = {{ villagers | tojson }};
+            const DEFAULT_HEADER = {
+                eyebrow: "MERCADO DO VILAREJO · OVERWORLD",
+                title: {{ showcase_name | tojson }},
+                desc: {{ showcase_description | tojson }}
+            };
+
             const cart = [];
             let activeModalItem = null;
+            let currentDimension = 'overworld'; // 'overworld' | 'nether' | 'todas'
+            let currentCategory = 'todos';      // 'todos' | 'armas' | 'blocos' | 'alquimia'
+            let currentVillager = null;         // null or villager_id ('armeiro', 'fazendeiro', 'alquimista', 'nether_trader')
+
+            // Minecraft Sound Effects
+            const SOUNDS = {
+                click: '/static/sounds/minecraft_click.mp3',
+                chestOpen: '/static/sounds/mine-chest-open.mp3',
+                chestClose: '/static/sounds/mine-chest-close.mp3',
+                levelUp: '/static/sounds/levelup.mp3'
+            };
+
+            function playSound(src) {
+                try {
+                    const audio = new Audio(src);
+                    audio.volume = 0.7;
+                    audio.play().catch(() => {});
+                } catch (err) {
+                    // Ignore audio autoplay errors in headless test environments
+                }
+            }
 
             const filterButtons = document.querySelectorAll('.slot-tab');
+            const dimensionButtons = document.querySelectorAll('.dim-btn');
+            const villagerNavButtons = document.querySelectorAll('.villager-nav-btn');
+            const navHomeBtn = document.getElementById('nav-home-btn');
             const productCards = document.querySelectorAll('#products-grid .card');
             const cartCountBadge = document.getElementById('cart-count-badge');
             const headerEmeraldTotal = document.getElementById('header-emerald-total');
+
+            // Header & Villager Banner Elements
+            const headerEyebrow = document.getElementById('header-eyebrow');
+            const headerTitle = document.getElementById('header-title');
+            const headerDesc = document.getElementById('header-desc');
+            const productsTitle = document.getElementById('products-title');
+            const productsSubtitle = document.getElementById('products-subtitle');
+            const villagerBanner = document.getElementById('villager-profile-banner');
 
             // Item Modal Elements
             const itemModal = document.getElementById('item-modal');
@@ -276,6 +399,9 @@
             const modalItemLore = document.getElementById('modal-item-lore');
             const modalItemDesc = document.getElementById('modal-item-desc');
             const modalItemDelivery = document.getElementById('modal-item-delivery');
+            const modalVillagerName = document.getElementById('modal-villager-name');
+            const modalVillagerRole = document.getElementById('modal-villager-role');
+            const modalVisitVillagerBtn = document.getElementById('modal-visit-villager-btn');
             const modalAddBtn = document.getElementById('modal-add-btn');
 
             // Cart Modal Elements
@@ -293,24 +419,153 @@
                 clearTimeout(toastTimer);
                 toastTimer = setTimeout(() => {
                     toastEl.hidden = true;
-                }, 2400);
+                }, 2600);
             }
+
+            function applyFiltersAndTheme() {
+                // 1. Update body theme class
+                document.body.className = '';
+                if (currentVillager && VILLAGERS_DATA[currentVillager]) {
+                    const v = VILLAGERS_DATA[currentVillager];
+                    document.body.classList.add(v.tema);
+                } else if (currentDimension === 'nether') {
+                    document.body.classList.add('theme-nether');
+                } else {
+                    document.body.classList.add('theme-overworld');
+                }
+
+                // 2. Update Navbar active states
+                navHomeBtn.classList.toggle('active', !currentVillager);
+                dimensionButtons.forEach((btn) => {
+                    const dim = btn.getAttribute('data-dimension');
+                    btn.classList.toggle('active', !currentVillager && dim === currentDimension);
+                });
+                villagerNavButtons.forEach((btn) => {
+                    const vId = btn.getAttribute('data-villager-id');
+                    btn.classList.toggle('active', currentVillager === vId);
+                });
+                filterButtons.forEach((btn) => {
+                    const cat = btn.getAttribute('data-filter');
+                    btn.classList.toggle('active', cat === currentCategory);
+                    btn.setAttribute('aria-selected', cat === currentCategory ? 'true' : 'false');
+                });
+
+                // 3. Update Header & Villager Profile Banner
+                if (currentVillager && VILLAGERS_DATA[currentVillager]) {
+                    const v = VILLAGERS_DATA[currentVillager];
+                    villagerBanner.hidden = false;
+                    document.getElementById('vp-icon').textContent = v.icone;
+                    document.getElementById('vp-level').textContent = v.nivel;
+                    document.getElementById('vp-dimension').textContent = v.dimensao_nome;
+                    document.getElementById('vp-name').textContent = v.nome;
+                    document.getElementById('vp-role').textContent = v.profissao;
+                    document.getElementById('vp-quote').textContent = `"${v.frase}"`;
+                    document.getElementById('vp-workstation').textContent = v.bloco_trabalho;
+                    document.getElementById('vp-specialty').textContent = v.especialidade;
+
+                    headerEyebrow.textContent = `OFICINA DO ARTESÃO · ${v.dimensao_nome.toUpperCase()}`;
+                    headerTitle.textContent = `${v.icone} Oficina de ${v.nome}`;
+                    headerDesc.textContent = v.profissao + " — Veja abaixo todos os itens criados e negociados por este Villager.";
+                    productsTitle.textContent = `Itens Criados por ${v.nome}`;
+                    productsSubtitle.innerHTML = `Exibindo o catálogo exclusivo da oficina de <strong>${v.nome}</strong>.`;
+                } else {
+                    villagerBanner.hidden = true;
+                    if (currentDimension === 'nether') {
+                        headerEyebrow.textContent = 'BASTIÃO DE TROCAS · DIMENSÃO NETHER';
+                        headerTitle.textContent = '🔥 MineShop — Mercado do Nether';
+                        headerDesc.textContent = 'Equipamentos de Netherita, blocos luminosos e poções contra lava forjados nas profundezas do Nether.';
+                        productsTitle.textContent = 'Relíquias e Itens do Nether';
+                        productsSubtitle.innerHTML = 'Mostrando itens da dimensão <strong>Nether</strong>. Cuidado com a lava!';
+                    } else if (currentDimension === 'todas') {
+                        headerEyebrow.textContent = 'CATÁLOGO MULTIDIMENSIONAL · OVERWORLD & NETHER';
+                        headerTitle.textContent = DEFAULT_HEADER.title;
+                        headerDesc.textContent = 'Visualizando todos os itens disponíveis nas oficinas do Overworld e do Nether.';
+                        productsTitle.textContent = 'Catálogo Completo (Overworld + Nether)';
+                        productsSubtitle.innerHTML = 'Mostrando itens de <strong>todas as dimensões</strong>.';
+                    } else {
+                        headerEyebrow.textContent = DEFAULT_HEADER.eyebrow;
+                        headerTitle.textContent = DEFAULT_HEADER.title;
+                        headerDesc.textContent = DEFAULT_HEADER.desc;
+                        productsTitle.textContent = 'Bancada de Itens da Vila';
+                        productsSubtitle.innerHTML = 'Mostrando itens da dimensão <strong>Overworld</strong>. Clique no nome de um Villager para visitar sua oficina!';
+                    }
+                }
+
+                // 4. Filter Product Cards
+                productCards.forEach((card) => {
+                    const inner = card.querySelector('.card-inner');
+                    if (!inner) return;
+                    const itemCat = inner.getAttribute('data-category');
+                    const itemVillager = inner.getAttribute('data-villager-id');
+                    const itemDim = inner.getAttribute('data-dimension');
+
+                    const matchesCategory = currentCategory === 'todos' || itemCat === currentCategory;
+                    let matchesContext = true;
+
+                    if (currentVillager) {
+                        matchesContext = itemVillager === currentVillager;
+                    } else if (currentDimension !== 'todas') {
+                        matchesContext = itemDim === currentDimension;
+                    }
+
+                    card.style.display = (matchesCategory && matchesContext) ? '' : 'none';
+                });
+            }
+
+            // Open a specific Villager Profile
+            function openVillagerProfile(villagerId) {
+                if (!VILLAGERS_DATA[villagerId]) return;
+                playSound(SOUNDS.click);
+                currentVillager = villagerId;
+                currentCategory = 'todos';
+                itemModal.hidden = true;
+                applyFiltersAndTheme();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                showToast(`Visitando a oficina de ${VILLAGERS_DATA[villagerId].nome}!`);
+            }
+
+            // Return to Main Village Plaza
+            function returnToPlaza(dimensionOverride) {
+                playSound(SOUNDS.click);
+                currentVillager = null;
+                if (dimensionOverride) {
+                    currentDimension = dimensionOverride;
+                }
+                applyFiltersAndTheme();
+            }
+
+            // Navbar Listeners
+            navHomeBtn.addEventListener('click', () => {
+                returnToPlaza('overworld');
+            });
+
+            document.getElementById('back-to-plaza-btn').addEventListener('click', () => {
+                returnToPlaza();
+            });
+
+            dimensionButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const selectedDim = btn.getAttribute('data-dimension');
+                    currentVillager = null;
+                    currentDimension = selectedDim;
+                    playSound(SOUNDS.click);
+                    applyFiltersAndTheme();
+                });
+            });
+
+            villagerNavButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const vId = btn.getAttribute('data-villager-id');
+                    openVillagerProfile(vId);
+                });
+            });
 
             // Category Filter Tabs
             filterButtons.forEach((btn) => {
                 btn.addEventListener('click', () => {
-                    const selected = btn.getAttribute('data-filter');
-                    filterButtons.forEach((b) => {
-                        b.classList.toggle('active', b === btn);
-                        b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
-                    });
-
-                    productCards.forEach((card) => {
-                        const inner = card.querySelector('.card-inner');
-                        const itemCategory = inner ? inner.getAttribute('data-category') : '';
-                        const matches = selected === 'todos' || itemCategory === selected;
-                        card.style.display = matches ? '' : 'none';
-                    });
+                    playSound(SOUNDS.click);
+                    currentCategory = btn.getAttribute('data-filter');
+                    applyFiltersAndTheme();
                 });
             });
 
@@ -326,11 +581,15 @@
                     description: cardInner.getAttribute('data-description'),
                     lore: cardInner.getAttribute('data-lore'),
                     delivery: cardInner.getAttribute('data-delivery'),
+                    villagerId: cardInner.getAttribute('data-villager-id'),
+                    villagerName: cardInner.getAttribute('data-villager-name'),
+                    villagerRole: cardInner.getAttribute('data-villager-role'),
                     image: cardInner.getAttribute('data-image')
                 };
             }
 
             function addToCart(item) {
+                playSound(SOUNDS.click);
                 tradeFeedback.hidden = true;
                 const existing = cart.find((entry) => entry.id === item.id);
                 if (existing) {
@@ -373,14 +632,15 @@
                             </div>
                             <div>
                                 <strong class="cart-item-title">${item.name}</strong>
-                                <span class="cart-item-meta">Limite de Stack: x${item.stack} (${stacksCount} slot${stacksCount > 1 ? 's' : ''})</span>
+                                <span class="cart-item-meta">Stack máx: x${item.stack} (${stacksCount} slot${stacksCount > 1 ? 's' : ''}) · ${item.villagerName}</span>
                             </div>
                         </div>
                         <div class="cart-item-right">
                             <span class="cart-item-subtotal">${item.price * item.qty} Esm.</span>
                             <div class="qty-controls">
-                                <button type="button" class="mc-qty-btn" data-action="dec" data-index="${index}" aria-label="Diminuir quantidade">-</button>
-                                <button type="button" class="mc-qty-btn" data-action="inc" data-index="${index}" aria-label="Aumentar quantidade">+</button>
+                                <button type="button" class="mc-qty-btn" data-action="dec" data-index="${index}" title="Remover 1" aria-label="Diminuir quantidade">-</button>
+                                <button type="button" class="mc-qty-btn" data-action="inc" data-index="${index}" title="Adicionar 1" aria-label="Aumentar quantidade">+</button>
+                                <button type="button" class="mc-qty-btn mc-qty-remove" data-action="remove" data-index="${index}" title="Remover item" aria-label="Remover item">X</button>
                             </div>
                         </div>
                     `;
@@ -395,6 +655,7 @@
                 const action = btn.getAttribute('data-action');
                 if (!cart[index]) return;
 
+                playSound(SOUNDS.click);
                 if (action === 'inc') {
                     cart[index].qty += 1;
                 } else if (action === 'dec') {
@@ -402,11 +663,14 @@
                     if (cart[index].qty <= 0) {
                         cart.splice(index, 1);
                     }
+                } else if (action === 'remove') {
+                    cart.splice(index, 1);
                 }
                 updateCartUI();
             });
 
             function openItemModal(item) {
+                playSound(SOUNDS.click);
                 activeModalItem = item;
                 modalItemImg.src = item.image;
                 modalItemImg.alt = item.name;
@@ -419,7 +683,17 @@
                 modalItemLore.textContent = item.lore;
                 modalItemDesc.textContent = item.description;
                 modalItemDelivery.textContent = item.delivery;
+                modalVillagerName.textContent = item.villagerName;
+                modalVillagerRole.textContent = item.villagerRole;
+                modalVisitVillagerBtn.textContent = `Ver Oficina de ${item.villagerName} →`;
                 itemModal.hidden = false;
+            }
+
+            function closeCartModal() {
+                if (!cartModal.hidden) {
+                    playSound(SOUNDS.chestClose);
+                    cartModal.hidden = true;
+                }
             }
 
             // Attach Card Listeners
@@ -428,6 +702,7 @@
                 const addBtn = cardInner.querySelector('.add-to-chest-btn');
                 const inspectBtn = cardInner.querySelector('.inspect-btn');
                 const spriteSlot = cardInner.querySelector('.sprite-slot');
+                const villagerChip = cardInner.querySelector('.open-villager-btn');
 
                 addBtn.addEventListener('click', () => addToCart(itemData));
                 inspectBtn.addEventListener('click', () => openItemModal(itemData));
@@ -438,13 +713,27 @@
                         openItemModal(itemData);
                     }
                 });
+                if (villagerChip) {
+                    villagerChip.addEventListener('click', () => {
+                        openVillagerProfile(itemData.villagerId);
+                    });
+                }
             });
 
-            // Modal Actions
+            // Visit Villager button inside Item Details Modal
+            modalVisitVillagerBtn.addEventListener('click', () => {
+                if (activeModalItem && activeModalItem.villagerId) {
+                    openVillagerProfile(activeModalItem.villagerId);
+                }
+            });
+
+            // Item Modal Actions
             document.getElementById('close-item-modal').addEventListener('click', () => {
+                playSound(SOUNDS.click);
                 itemModal.hidden = true;
             });
             document.getElementById('modal-close-action').addEventListener('click', () => {
+                playSound(SOUNDS.click);
                 itemModal.hidden = true;
             });
             modalAddBtn.addEventListener('click', () => {
@@ -454,37 +743,45 @@
                 }
             });
 
-            // Cart Modal Actions
+            // Cart / Chest Modal Actions
             document.getElementById('open-cart-btn').addEventListener('click', () => {
+                playSound(SOUNDS.chestOpen);
                 tradeFeedback.hidden = true;
                 cartModal.hidden = false;
             });
             document.getElementById('close-cart-modal').addEventListener('click', () => {
-                cartModal.hidden = true;
+                closeCartModal();
             });
             document.getElementById('clear-cart-btn').addEventListener('click', () => {
+                playSound(SOUNDS.click);
                 cart.length = 0;
                 tradeFeedback.hidden = true;
                 updateCartUI();
             });
             document.getElementById('checkout-btn').addEventListener('click', () => {
                 if (cart.length === 0) {
+                    playSound(SOUNDS.click);
                     showToast('Adicione pelo menos 1 item ao Baú antes de negociar!');
                     return;
                 }
+                playSound(SOUNDS.levelUp);
                 cart.length = 0;
                 updateCartUI();
                 tradeFeedback.hidden = false;
-                showToast('Troca concluída com o Aldeão!');
+                showToast('Level Up! Troca concluída com o Aldeão!');
             });
 
             // Close modals when clicking backdrop
-            [itemModal, cartModal].forEach((backdrop) => {
-                backdrop.addEventListener('click', (e) => {
-                    if (e.target === backdrop) {
-                        backdrop.hidden = true;
-                    }
-                });
+            itemModal.addEventListener('click', (e) => {
+                if (e.target === itemModal) {
+                    playSound(SOUNDS.click);
+                    itemModal.hidden = true;
+                }
+            });
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    closeCartModal();
+                }
             });
         })();
     </script>
