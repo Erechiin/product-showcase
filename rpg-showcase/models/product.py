@@ -11,15 +11,15 @@ class Product(ABC):
         price,
         image,
         item_id=0,
-        category_id="geral",
-        category_name="Geral",
+        category_id="general",
+        category_name="General",
         stack=1,
-        stat_label="Atributo",
-        stat_value="Padrão",
+        stat_label="Attribute",
+        stat_value="Standard",
         lore="",
-        villager_id="armeiro",
-        villager_name="Ferreiro Gorak",
-        villager_role="Mestre Armeiro",
+        villager_id="armorer",
+        villager_name="Blacksmith Gorak",
+        villager_role="Master Armorer",
         dimension="overworld",
     ):
         self.item_id = item_id
@@ -52,6 +52,22 @@ class Product(ABC):
     def formatted_price(self):
         # Keep the activity's Brazilian real (BRL) display format.
         return f"R$ {self.price:.2f}".replace(".", ",")
+
+    def discounted_price(self, discount_percent):
+        """Return a new price with discount applied without mutating self.price."""
+        if (
+            isinstance(discount_percent, bool)
+            or not isinstance(discount_percent, (int, float))
+            or discount_percent < 0
+            or discount_percent > 100
+        ):
+            raise ValueError("Discount percentage must be between 0 and 100.")
+        return round(self.price * (1 - discount_percent / 100), 2)
+
+    def formatted_discounted_price(self, discount_percent):
+        """Return the discounted price in BRL format without changing self.price."""
+        discounted = self.discounted_price(discount_percent)
+        return f"R$ {discounted:.2f}".replace(".", ",")
 
     def emerald_price(self):
         return int(self.price)

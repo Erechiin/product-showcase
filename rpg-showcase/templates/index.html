@@ -24,21 +24,21 @@
     </svg>
 
     <!-- Top Interactive Navbar: Dimensions + Villager Profiles + Mobile Toggle -->
-    <nav class="mc-top-navbar" aria-label="Navegação Principal da Loja">
+    <nav class="mc-top-navbar" aria-label="Main Store Navigation">
         <div class="container top-nav-inner">
             <div class="nav-mobile-bar">
                 <button type="button" class="nav-btn nav-home-btn active" id="nav-home-btn">
-                    🏠 Praça da Vila
+                    🏠 Village Plaza
                 </button>
                 <button type="button" class="nav-btn mobile-menu-toggle" id="mobile-menu-toggle" aria-expanded="false" aria-controls="nav-collapsible">
-                    ☰ Dimensões & Villagers
+                    ☰ Dimensions & Villagers
                 </button>
             </div>
 
             <div class="nav-collapsible" id="nav-collapsible">
                 <!-- Dimension Switcher -->
-                <div class="nav-group dimension-switcher" role="group" aria-label="Seletor de Dimensão">
-                    <span class="nav-group-label">Dimensão:</span>
+                <div class="nav-group dimension-switcher" role="group" aria-label="Dimension Selector">
+                    <span class="nav-group-label">Dimension:</span>
                     <div class="nav-btn-row">
                         <button type="button" class="dim-btn active" data-dimension="overworld">
                             ☀️ Overworld
@@ -46,23 +46,23 @@
                         <button type="button" class="dim-btn dim-btn-nether" data-dimension="nether">
                             🔥 Nether
                         </button>
-                        <button type="button" class="dim-btn" data-dimension="todas">
-                            🌍 Todas
+                        <button type="button" class="dim-btn" data-dimension="all">
+                            🌍 All
                         </button>
                     </div>
                 </div>
 
                 <!-- Villager Profiles Quick Menu -->
-                <div class="nav-group villager-nav-group" role="group" aria-label="Perfis dos Villagers">
+                <div class="nav-group villager-nav-group" role="group" aria-label="Villager Profiles">
                     <span class="nav-group-label">Villagers:</span>
                     <div class="nav-btn-row">
                         {% for v_id, v in villagers.items() %}
                         <button type="button"
                                 class="villager-nav-btn"
                                 data-villager-id="{{ v.id }}"
-                                title="Visitar oficina de {{ v.nome }} ({{ v.profissao }})">
-                            <span>{{ v.icone }}</span>
-                            <span>{{ v.nome }}</span>
+                                title="Visit {{ v.name }}'s workshop ({{ v.role }})">
+                            <span>{{ v.icon }}</span>
+                            <span>{{ v.name }}</span>
                         </button>
                         {% endfor %}
                     </div>
@@ -75,12 +75,12 @@
     <header class="header">
         <div class="container navbar">
             <div class="brand">
-                <p class="eyebrow" id="header-eyebrow">MERCADO DO VILAREJO · OVERWORLD</p>
+                <p class="eyebrow" id="header-eyebrow">VILLAGE MARKET · OVERWORLD</p>
                 <h1 id="header-title">{{ showcase_name }}</h1>
                 <p class="introduction" id="header-desc">{{ showcase_description }}</p>
             </div>
 
-            <button type="button" class="chest-btn" id="open-cart-btn" aria-label="Abrir Baú de Compras">
+            <button type="button" class="chest-btn" id="open-cart-btn" aria-label="Open Trading Chest">
                 <span class="chest-slot">
                     <svg class="pixel-icon chest-icon" width="34" height="34">
                         <use href="#icon-chest"></use>
@@ -88,10 +88,10 @@
                     <span class="stack-badge" id="cart-count-badge">0</span>
                 </span>
                 <span class="chest-info">
-                    <span class="chest-label">Abrir Baú</span>
+                    <span class="chest-label">Open Chest</span>
                     <span class="chest-total" id="header-chest-total">
-                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="18" height="18" class="emerald-icon" id="header-currency-icon">
-                        <span id="header-emerald-total">0</span> <span id="header-currency-unit">Esm.</span>
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Emerald" width="18" height="18" class="emerald-icon" id="header-currency-icon">
+                        <span id="header-emerald-total">0</span> <span id="header-currency-unit">Em.</span>
                     </span>
                 </span>
             </button>
@@ -113,14 +113,14 @@
                     <div class="villager-profile-top">
                         <div class="villager-profile-main">
                             <div class="villager-badges">
-                                <span class="vp-badge vp-level" id="vp-level">Nível 5 · Mestre</span>
+                                <span class="vp-badge vp-level" id="vp-level">Level 5 · Master</span>
                                 <span class="vp-badge vp-dimension" id="vp-dimension">Overworld</span>
                             </div>
-                            <h2 id="vp-name">Ferreiro Gorak</h2>
-                            <p class="vp-role" id="vp-role">Mestre Armeiro & Ferramenteiro</p>
+                            <h2 id="vp-name">Blacksmith Gorak</h2>
+                            <p class="vp-role" id="vp-role">Master Armorer & Toolsmith</p>
                         </div>
                         <button type="button" class="mc-btn mc-btn-secondary" id="back-to-plaza-btn">
-                            ← Voltar à Praça da Vila
+                            ← Back to Village Plaza
                         </button>
                     </div>
 
@@ -128,12 +128,12 @@
 
                     <div class="villager-profile-stats">
                         <div class="vp-stat-box">
-                            <span class="vp-stat-label">Bloco de Trabalho:</span>
-                            <strong id="vp-workstation">Bigorna & Alto-Forno</strong>
+                            <span class="vp-stat-label">Workstation Block:</span>
+                            <strong id="vp-workstation">Anvil & Blast Furnace</strong>
                         </div>
                         <div class="vp-stat-box">
-                            <span class="vp-stat-label">Especialidade da Oficina:</span>
-                            <strong id="vp-specialty">Armas e Ferramentas</strong>
+                            <span class="vp-stat-label">Workshop Specialty:</span>
+                            <strong id="vp-specialty">Weapons and Tools</strong>
                         </div>
                     </div>
                 </div>
@@ -145,29 +145,29 @@
                 <div class="inventory-bar">
                     <div class="inventory-bar-top">
                         <div>
-                            <h2 id="products-title">Bancada de Itens da Vila</h2>
-                            <p id="products-subtitle">Mostrando itens da dimensão <strong>Overworld</strong>. Clique em qualquer item ou Villager para explorar!</p>
+                            <h2 id="products-title">Village Crafting Showcase</h2>
+                            <p id="products-subtitle">Showing items from the <strong>Overworld</strong> dimension. Click any item or Villager to explore!</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Category Filters styled as Inventory Slots -->
-                <div class="category-slots" role="tablist" aria-label="Filtrar por categoria">
-                    <button type="button" class="slot-tab active" data-filter="todos" role="tab" aria-selected="true">
+                <div class="category-slots" role="tablist" aria-label="Filter by category">
+                    <button type="button" class="slot-tab active" data-filter="all" role="tab" aria-selected="true">
                         <span class="slot-tab-code">[1]</span>
-                        <span>Todos</span>
+                        <span>All Items</span>
                     </button>
-                    <button type="button" class="slot-tab" data-filter="armas" role="tab" aria-selected="false">
+                    <button type="button" class="slot-tab" data-filter="weapons" role="tab" aria-selected="false">
                         <span class="slot-tab-code">[2]</span>
-                        <span>Armas & Ferramentas</span>
+                        <span>Weapons & Tools</span>
                     </button>
-                    <button type="button" class="slot-tab" data-filter="blocos" role="tab" aria-selected="false">
+                    <button type="button" class="slot-tab" data-filter="blocks" role="tab" aria-selected="false">
                         <span class="slot-tab-code">[3]</span>
-                        <span>Relíquias & Recursos</span>
+                        <span>Relics & Resources</span>
                     </button>
-                    <button type="button" class="slot-tab" data-filter="alquimia" role="tab" aria-selected="false">
+                    <button type="button" class="slot-tab" data-filter="alchemy" role="tab" aria-selected="false">
                         <span class="slot-tab-code">[4]</span>
-                        <span>Poções & Consumíveis</span>
+                        <span>Potions & Consumables</span>
                     </button>
                 </div>
             </div>
@@ -193,8 +193,8 @@
                          data-villager-name="{{ product.villager_name }}"
                          data-villager-role="{{ product.villager_role }}"
                          data-dimension="{{ product.dimension }}"
-                         data-currency-name="{{ 'Barras de Ouro' if product.dimension == 'nether' else 'Esmeraldas' }}"
-                         data-currency-short="{{ 'Ouro' if product.dimension == 'nether' else 'Esm.' }}"
+                         data-currency-name="{{ 'Gold Ingots' if product.dimension == 'nether' else 'Emeralds' }}"
+                         data-currency-short="{{ 'Gold' if product.dimension == 'nether' else 'Em.' }}"
                          data-currency-icon="{{ '/static/images/Gold_Ingot_JE4_BE2.png' if product.dimension == 'nether' else '/static/images/Emerald_JE3_BE3.png' }}"
                          data-image="/static/images/{{ product.image | safe }}">
 
@@ -206,10 +206,10 @@
                         </div>
 
                         <!-- Sprite Slot -->
-                        <div class="sprite-slot" role="button" tabindex="0" aria-label="Ver detalhes de {{ product.name }}">
+                        <div class="sprite-slot" role="button" tabindex="0" aria-label="View details for {{ product.name }}">
                             <img src="/static/images/{{ product.image | safe }}"
                                  alt="Image of {{ product.name }}" width="160" height="160" class="sprite-img">
-                            <span class="stack-badge" title="Limite máximo por stack">x{{ product.stack }}</span>
+                            <span class="stack-badge" title="Max stack size">x{{ product.stack }}</span>
                         </div>
 
                         <div class="card-content">
@@ -224,33 +224,38 @@
 
                             <!-- Clickable Villager Craftsman Chip on Card -->
                             <button type="button"
-                                    class="card-villager-chip open-villager-btn"
-                                    data-villager-id="{{ product.villager_id }}"
-                                    title="Ver perfil e mais itens feitos por {{ product.villager_name }}">
-                                <span class="chip-label">Artesão: <strong>{{ product.villager_name }}</strong></span>
-                                <span class="chip-arrow">Ver perfil →</span>
+                                     class="card-villager-chip open-villager-btn"
+                                     data-villager-id="{{ product.villager_id }}"
+                                     title="View profile and more items crafted by {{ product.villager_name }}">
+                                <span class="chip-label">Crafted by: <strong>{{ product.villager_name }}</strong></span>
+                                <span class="chip-arrow">Profile →</span>
                             </button>
 
                             <!-- Currency Price (Emerald or Gold Ingot) + BRL Reference -->
                             <div class="price-box {{ 'price-box-gold' if product.dimension == 'nether' else '' }}">
                                 <div class="emerald-price">
                                     <img src="{{ '/static/images/Gold_Ingot_JE4_BE2.png' if product.dimension == 'nether' else '/static/images/Emerald_JE3_BE3.png' }}"
-                                         alt="{{ 'Barra de Ouro' if product.dimension == 'nether' else 'Esmeralda' }}"
+                                         alt="{{ 'Gold Ingot' if product.dimension == 'nether' else 'Emerald' }}"
                                          width="22" height="22" class="emerald-icon">
                                     <span class="emerald-amount">{{ product.emerald_price() }}</span>
-                                    <span class="emerald-unit">{{ 'Barras de Ouro' if product.dimension == 'nether' else 'Esmeraldas' }}</span>
+                                    <span class="emerald-unit">{{ 'Gold Ingots' if product.dimension == 'nether' else 'Emeralds' }}</span>
                                 </div>
-                                <p class="price" title="Valor de referência da atividade">{{ product.formatted_price() }}</p>
+                                <div class="price-ref-group">
+                                    <p class="price" title="Original reference price">{{ product.formatted_price() }}</p>
+                                    <p class="discount-price" title="Hero of the Village 25% discount">
+                                        Hero -25%: <strong>{{ product.formatted_discounted_price(25) }}</strong>
+                                    </p>
+                                </div>
                             </div>
 
                             <p class="delivery">{{ product.delivery() }}</p>
 
                             <div class="card-actions">
                                 <button type="button" class="mc-btn mc-btn-secondary inspect-btn">
-                                    Detalhes
+                                    Details
                                 </button>
                                 <button type="button" class="mc-btn mc-btn-primary add-to-chest-btn">
-                                    + Adicionar ao Baú
+                                    + Add to Chest
                                 </button>
                             </div>
                         </div>
@@ -270,19 +275,19 @@
                     <span class="stack-badge" id="modal-item-stack">x1</span>
                 </div>
                 <div class="mc-tooltip-title-group">
-                    <span class="mc-tooltip-category" id="modal-item-category">Categoria</span>
-                    <h3 id="modal-item-name">Nome do Item</h3>
+                    <span class="mc-tooltip-category" id="modal-item-category">Category</span>
+                    <h3 id="modal-item-name">Item Name</h3>
                     <div class="mc-tooltip-price" id="modal-price-container">
-                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Moeda" width="18" height="18" class="emerald-icon" id="modal-item-currency-icon">
-                        <span id="modal-item-price">0</span> <span id="modal-item-currency-unit">Esmeraldas</span>
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Currency" width="18" height="18" class="emerald-icon" id="modal-item-currency-icon">
+                        <span id="modal-item-price">0</span> <span id="modal-item-currency-unit">Emeralds</span>
                     </div>
                 </div>
-                <button type="button" class="mc-close-btn" id="close-item-modal" aria-label="Fechar modal">X</button>
+                <button type="button" class="mc-close-btn" id="close-item-modal" aria-label="Close modal">X</button>
             </div>
 
             <div class="mc-tooltip-body">
                 <div class="mc-stat-highlight">
-                    <span id="modal-stat-label">Atributo</span>:
+                    <span id="modal-stat-label">Attribute</span>:
                     <strong id="modal-stat-value">+0</strong>
                 </div>
                 <p class="mc-lore-text" id="modal-item-lore"></p>
@@ -292,19 +297,19 @@
                 <!-- Villager Creator Profile Box inside Item Details Modal -->
                 <div class="modal-villager-box">
                     <div class="modal-villager-info">
-                        <span class="modal-villager-eyebrow">CRIADO / VENDIDO PELO VILLAGER:</span>
-                        <strong id="modal-villager-name">Ferreiro Gorak</strong>
-                        <span id="modal-villager-role">Mestre Armeiro & Ferramenteiro</span>
+                        <span class="modal-villager-eyebrow">CRAFTED / TRADED BY VILLAGER:</span>
+                        <strong id="modal-villager-name">Blacksmith Gorak</strong>
+                        <span id="modal-villager-role">Master Armorer & Toolsmith</span>
                     </div>
                     <button type="button" class="mc-btn mc-btn-villager" id="modal-visit-villager-btn">
-                        Ver Oficina & Mais Itens →
+                        Visit Workshop & More Items →
                     </button>
                 </div>
             </div>
 
             <div class="mc-tooltip-footer">
-                <button type="button" class="mc-btn mc-btn-secondary" id="modal-close-action">Fechar</button>
-                <button type="button" class="mc-btn mc-btn-primary" id="modal-add-btn">+ Adicionar ao Baú</button>
+                <button type="button" class="mc-btn mc-btn-secondary" id="modal-close-action">Close</button>
+                <button type="button" class="mc-btn mc-btn-primary" id="modal-add-btn">+ Add to Chest</button>
             </div>
         </div>
     </div>
@@ -317,37 +322,37 @@
                     <svg class="pixel-icon" width="26" height="26">
                         <use href="#icon-chest"></use>
                     </svg>
-                    <h3 id="cart-modal-title">Baú de Trocas do Vilarejo</h3>
+                    <h3 id="cart-modal-title">Village Trading Chest</h3>
                 </div>
-                <button type="button" class="mc-close-btn" id="close-cart-modal" aria-label="Fechar Baú">X</button>
+                <button type="button" class="mc-close-btn" id="close-cart-modal" aria-label="Close Chest">X</button>
             </div>
 
             <div class="mc-window-body">
                 <div id="cart-empty-state" class="cart-empty">
-                    <p>Seu baú está vazio no momento.</p>
-                    <p class="cart-hint">Clique em "+ Adicionar ao Baú" nos itens da vitrine para preparar sua troca.</p>
+                    <p>Your chest is currently empty.</p>
+                    <p class="cart-hint">Click "+ Add to Chest" on any showcase item to prepare your trade.</p>
                 </div>
 
                 <ul class="cart-item-list" id="cart-items-list" hidden></ul>
 
                 <div class="trade-banner" id="trade-feedback" hidden>
-                    <strong>Troca realizada com sucesso! (Level Up!)</strong>
-                    <p>Suas Esmeraldas foram trocadas e os itens foram enviados para o seu inventário!</p>
+                    <strong>Trade completed successfully! (Level Up!)</strong>
+                    <p>Your currency was exchanged and the items were sent to your inventory!</p>
                 </div>
             </div>
 
             <div class="mc-window-footer">
                 <div class="cart-summary">
-                    <span>Total da Troca:</span>
+                    <span>Trade Total:</span>
                     <strong class="cart-total-emeralds" id="cart-total-display">
-                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="20" height="20" class="emerald-icon">
-                        <span id="cart-total-value">0</span> Esmeraldas
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Emerald" width="20" height="20" class="emerald-icon">
+                        <span id="cart-total-value">0</span> Emeralds
                     </strong>
                 </div>
                 <div class="cart-footer-actions">
-                    <button type="button" class="mc-btn mc-btn-secondary" id="clear-cart-btn">Esvaziar Baú</button>
+                    <button type="button" class="mc-btn mc-btn-secondary" id="clear-cart-btn">Empty Chest</button>
                     <button type="button" class="mc-btn mc-btn-emerald" id="checkout-btn">
-                        Trocar com Aldeão
+                        Trade with Villager
                     </button>
                 </div>
             </div>
@@ -365,7 +370,7 @@
         (function () {
             const VILLAGERS_DATA = {{ villagers | tojson }};
             const DEFAULT_HEADER = {
-                eyebrow: "MERCADO DO VILAREJO · OVERWORLD",
+                eyebrow: "VILLAGE MARKET · OVERWORLD",
                 title: {{ showcase_name | tojson }},
                 desc: {{ showcase_description | tojson }}
             };
@@ -373,7 +378,7 @@
             const cart = [];
             let activeModalItem = null;
             let currentDimension = 'overworld';
-            let currentCategory = 'todos';
+            let currentCategory = 'all';
             let currentVillager = null;
 
             // Minecraft Sound Effects
@@ -381,14 +386,39 @@
                 click: '/static/sounds/minecraft_click.mp3',
                 chestOpen: '/static/sounds/mine-chest-open.mp3',
                 chestClose: '/static/sounds/mine-chest-close.mp3',
-                levelUp: '/static/sounds/levelup.mp3'
+                levelUp: '/static/sounds/levelup.mp3',
+                villagerTrading: '/static/sounds/villager-trading.mp3',
+                piglinSound: '/static/sounds/piglin-2.mp3'
             };
+
+            const villagerAudio = new Audio(SOUNDS.villagerTrading);
+            villagerAudio.volume = 0.85;
+            const piglinAudio = new Audio(SOUNDS.piglinSound);
+            piglinAudio.volume = 0.85;
 
             function playSound(src) {
                 try {
                     const audio = new Audio(src);
                     audio.volume = 0.7;
                     audio.play().catch(() => {});
+                } catch (err) {}
+            }
+
+            function stopVillagerSound() {
+                try {
+                    villagerAudio.pause();
+                    villagerAudio.currentTime = 0;
+                    piglinAudio.pause();
+                    piglinAudio.currentTime = 0;
+                } catch (err) {}
+            }
+
+            function playVillagerSound() {
+                if (!currentVillager) return;
+                stopVillagerSound();
+                try {
+                    const activeVoice = currentVillager === 'nether_trader' ? piglinAudio : villagerAudio;
+                    activeVoice.play().catch(() => {});
                 } catch (err) {}
             }
 
@@ -436,7 +466,6 @@
             const cartModal = document.getElementById('cart-modal');
             const cartEmptyState = document.getElementById('cart-empty-state');
             const cartItemsList = document.getElementById('cart-items-list');
-            const cartTotalValue = document.getElementById('cart-total-value');
             const tradeFeedback = document.getElementById('trade-feedback');
             const toastEl = document.getElementById('mc-toast');
             let toastTimer = null;
@@ -469,10 +498,10 @@
                 document.body.className = '';
                 if (currentVillager && VILLAGERS_DATA[currentVillager]) {
                     const v = VILLAGERS_DATA[currentVillager];
-                    if (v.dimensao === 'nether') {
+                    if (v.dimension === 'nether') {
                         document.body.classList.add('theme-nether');
                     }
-                    document.body.classList.add(v.tema);
+                    document.body.classList.add(v.theme);
                 } else if (currentDimension === 'nether') {
                     document.body.classList.add('theme-nether');
                 } else {
@@ -500,49 +529,49 @@
 
                     if (v.avatar) {
                         vpAvatarImg.src = v.avatar;
-                        vpAvatarImg.alt = v.nome;
+                        vpAvatarImg.alt = v.name;
                         vpAvatarImg.classList.toggle('face-right', !!v.flip_avatar);
                         vpAvatarImg.hidden = false;
                         vpIconBox.hidden = true;
                     } else {
                         vpAvatarImg.hidden = true;
                         vpIconBox.hidden = false;
-                        vpIconBox.textContent = v.icone;
+                        vpIconBox.textContent = v.icon;
                     }
 
-                    document.getElementById('vp-level').textContent = v.nivel;
-                    document.getElementById('vp-dimension').textContent = v.dimensao_nome;
-                    document.getElementById('vp-name').textContent = v.nome;
-                    document.getElementById('vp-role').textContent = v.profissao;
-                    document.getElementById('vp-quote').textContent = `"${v.frase}"`;
-                    document.getElementById('vp-workstation').textContent = v.bloco_trabalho;
-                    document.getElementById('vp-specialty').textContent = v.especialidade;
+                    document.getElementById('vp-level').textContent = v.level;
+                    document.getElementById('vp-dimension').textContent = v.dimension_name;
+                    document.getElementById('vp-name').textContent = v.name;
+                    document.getElementById('vp-role').textContent = v.role;
+                    document.getElementById('vp-quote').textContent = `"${v.quote}"`;
+                    document.getElementById('vp-workstation').textContent = v.workstation;
+                    document.getElementById('vp-specialty').textContent = v.specialty;
 
-                    headerEyebrow.textContent = `OFICINA DO ARTESÃO · ${v.dimensao_nome.toUpperCase()}`;
-                    headerTitle.textContent = `${v.icone} Oficina de ${v.nome}`;
-                    headerDesc.textContent = v.profissao + " — Veja abaixo todos os itens criados e negociados por este Villager.";
-                    productsTitle.textContent = `Itens Criados por ${v.nome}`;
-                    productsSubtitle.innerHTML = `Exibindo o catálogo exclusivo da oficina de <strong>${v.nome}</strong>.`;
+                    headerEyebrow.textContent = `CRAFTSMAN WORKSHOP · ${v.dimension_name.toUpperCase()}`;
+                    headerTitle.textContent = `${v.icon} ${v.name}'s Workshop`;
+                    headerDesc.textContent = v.role + " — Browse all items crafted and traded by this Villager below.";
+                    productsTitle.textContent = `Items Crafted by ${v.name}`;
+                    productsSubtitle.innerHTML = `Displaying the exclusive catalog from <strong>${v.name}</strong>'s workshop.`;
                 } else {
                     villagerBanner.hidden = true;
                     if (currentDimension === 'nether') {
-                        headerEyebrow.textContent = 'BASTIÃO DE TROCAS · DIMENSÃO NETHER';
-                        headerTitle.textContent = '🔥 MineShop — Mercado do Nether';
-                        headerDesc.textContent = 'Equipamentos de Netherita, blocos luminosos e poções contra lava forjados nas profundezas do Nether.';
-                        productsTitle.textContent = 'Relíquias e Itens do Nether';
-                        productsSubtitle.innerHTML = 'Mostrando itens da dimensão <strong>Nether</strong>. Cuidado com a lava!';
-                    } else if (currentDimension === 'todas') {
-                        headerEyebrow.textContent = 'CATÁLOGO MULTIDIMENSIONAL · OVERWORLD & NETHER';
+                        headerEyebrow.textContent = 'BASTION TRADING POST · NETHER DIMENSION';
+                        headerTitle.textContent = '🔥 MineShop — Nether Market';
+                        headerDesc.textContent = 'Netherite ingots, Crying Obsidian, and Ender Pearls bartered for Gold Ingots in the depths of the Nether.';
+                        productsTitle.textContent = 'Nether Relics & Items';
+                        productsSubtitle.innerHTML = 'Showing items from the <strong>Nether</strong> dimension. Watch out for lava!';
+                    } else if (currentDimension === 'all') {
+                        headerEyebrow.textContent = 'MULTIDIMENSIONAL CATALOG · OVERWORLD & NETHER';
                         headerTitle.textContent = DEFAULT_HEADER.title;
-                        headerDesc.textContent = 'Visualizando todos os itens disponíveis nas oficinas do Overworld e do Nether.';
-                        productsTitle.textContent = 'Catálogo Completo (Overworld + Nether)';
-                        productsSubtitle.innerHTML = 'Mostrando itens de <strong>todas as dimensões</strong>.';
+                        headerDesc.textContent = 'Viewing all items available across Overworld and Nether workshops.';
+                        productsTitle.textContent = 'Complete Catalog (Overworld + Nether)';
+                        productsSubtitle.innerHTML = 'Showing items from <strong>all dimensions</strong>.';
                     } else {
                         headerEyebrow.textContent = DEFAULT_HEADER.eyebrow;
                         headerTitle.textContent = DEFAULT_HEADER.title;
                         headerDesc.textContent = DEFAULT_HEADER.desc;
-                        productsTitle.textContent = 'Bancada de Itens da Vila';
-                        productsSubtitle.innerHTML = 'Mostrando itens da dimensão <strong>Overworld</strong>. Clique no nome de um Villager para visitar sua oficina!';
+                        productsTitle.textContent = 'Village Crafting Showcase';
+                        productsSubtitle.innerHTML = 'Showing items from the <strong>Overworld</strong> dimension. Click any Villager name to visit their workshop!';
                     }
                 }
 
@@ -553,12 +582,12 @@
                     const itemVillager = inner.getAttribute('data-villager-id');
                     const itemDim = inner.getAttribute('data-dimension');
 
-                    const matchesCategory = currentCategory === 'todos' || itemCat === currentCategory;
+                    const matchesCategory = currentCategory === 'all' || itemCat === currentCategory;
                     let matchesContext = true;
 
                     if (currentVillager) {
                         matchesContext = itemVillager === currentVillager;
-                    } else if (currentDimension !== 'todas') {
+                    } else if (currentDimension !== 'all') {
                         matchesContext = itemDim === currentDimension;
                     }
 
@@ -572,15 +601,17 @@
                 if (!VILLAGERS_DATA[villagerId]) return;
                 playSound(SOUNDS.click);
                 currentVillager = villagerId;
-                currentCategory = 'todos';
+                currentCategory = 'all';
                 itemModal.hidden = true;
                 closeMobileMenu();
                 applyFiltersAndTheme();
+                playVillagerSound();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                showToast(`Visitando a oficina de ${VILLAGERS_DATA[villagerId].nome}!`);
+                showToast(`Visiting ${VILLAGERS_DATA[villagerId].name}'s workshop!`);
             }
 
             function returnToPlaza(dimensionOverride) {
+                stopVillagerSound();
                 playSound(SOUNDS.click);
                 currentVillager = null;
                 if (dimensionOverride) {
@@ -588,6 +619,15 @@
                 }
                 closeMobileMenu();
                 applyFiltersAndTheme();
+            }
+
+            const vpStage = document.getElementById('vp-stage');
+            if (vpStage) {
+                vpStage.addEventListener('click', () => {
+                    if (currentVillager) {
+                        playVillagerSound();
+                    }
+                });
             }
 
             navHomeBtn.addEventListener('click', () => {
@@ -601,6 +641,7 @@
             dimensionButtons.forEach((btn) => {
                 btn.addEventListener('click', () => {
                     const selectedDim = btn.getAttribute('data-dimension');
+                    stopVillagerSound();
                     currentVillager = null;
                     currentDimension = selectedDim;
                     playSound(SOUNDS.click);
@@ -640,8 +681,8 @@
                     villagerName: cardInner.getAttribute('data-villager-name'),
                     villagerRole: cardInner.getAttribute('data-villager-role'),
                     dimension: cardInner.getAttribute('data-dimension'),
-                    currencyName: cardInner.getAttribute('data-currency-name') || 'Esmeraldas',
-                    currencyShort: cardInner.getAttribute('data-currency-short') || 'Esm.',
+                    currencyName: cardInner.getAttribute('data-currency-name') || 'Emeralds',
+                    currencyShort: cardInner.getAttribute('data-currency-short') || 'Em.',
                     currencyIcon: cardInner.getAttribute('data-currency-icon') || '/static/images/Emerald_JE3_BE3.png',
                     image: cardInner.getAttribute('data-image')
                 };
@@ -657,7 +698,7 @@
                     cart.push({ ...item, qty: 1 });
                 }
                 updateCartUI();
-                showToast(`+1 ${item.name} guardado no Baú!`);
+                showToast(`+1 ${item.name} stored in Chest!`);
             }
 
             function updateCartUI() {
@@ -677,44 +718,44 @@
 
                 if (totalGold > 0 && totalEmeralds === 0) {
                     headerCurrencyIcon.src = '/static/images/Gold_Ingot_JE4_BE2.png';
-                    headerCurrencyIcon.alt = 'Barra de Ouro';
+                    headerCurrencyIcon.alt = 'Gold Ingot';
                     headerEmeraldTotal.textContent = totalGold;
-                    headerCurrencyUnit.textContent = 'Ouro';
+                    headerCurrencyUnit.textContent = 'Gold';
                 } else if (totalEmeralds > 0 && totalGold === 0) {
                     headerCurrencyIcon.src = '/static/images/Emerald_JE3_BE3.png';
-                    headerCurrencyIcon.alt = 'Esmeralda';
+                    headerCurrencyIcon.alt = 'Emerald';
                     headerEmeraldTotal.textContent = totalEmeralds;
-                    headerCurrencyUnit.textContent = 'Esm.';
+                    headerCurrencyUnit.textContent = 'Em.';
                 } else if (totalEmeralds > 0 && totalGold > 0) {
                     headerCurrencyIcon.src = isNetherActive ? '/static/images/Gold_Ingot_JE4_BE2.png' : '/static/images/Emerald_JE3_BE3.png';
-                    headerEmeraldTotal.textContent = `${totalEmeralds} Esm. + ${totalGold}`;
-                    headerCurrencyUnit.textContent = 'Ouro';
+                    headerEmeraldTotal.textContent = `${totalEmeralds} Em. + ${totalGold}`;
+                    headerCurrencyUnit.textContent = 'Gold';
                 } else {
                     headerCurrencyIcon.src = isNetherActive ? '/static/images/Gold_Ingot_JE4_BE2.png' : '/static/images/Emerald_JE3_BE3.png';
-                    headerCurrencyIcon.alt = isNetherActive ? 'Barra de Ouro' : 'Esmeralda';
+                    headerCurrencyIcon.alt = isNetherActive ? 'Gold Ingot' : 'Emerald';
                     headerEmeraldTotal.textContent = '0';
-                    headerCurrencyUnit.textContent = isNetherActive ? 'Ouro' : 'Esm.';
+                    headerCurrencyUnit.textContent = isNetherActive ? 'Gold' : 'Em.';
                 }
 
                 const cartTotalDisplay = document.getElementById('cart-total-display');
                 if (totalGold > 0 && totalEmeralds === 0) {
                     cartTotalDisplay.innerHTML = `
-                        <img src="/static/images/Gold_Ingot_JE4_BE2.png" alt="Barra de Ouro" width="20" height="20" class="emerald-icon">
-                        <span id="cart-total-value">${totalGold}</span> Barras de Ouro
+                        <img src="/static/images/Gold_Ingot_JE4_BE2.png" alt="Gold Ingot" width="20" height="20" class="emerald-icon">
+                        <span id="cart-total-value">${totalGold}</span> Gold Ingots
                     `;
                 } else if (totalEmeralds > 0 && totalGold > 0) {
                     cartTotalDisplay.innerHTML = `
-                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Esmeralda" width="20" height="20" class="emerald-icon">
-                        <span>${totalEmeralds} Esm.</span>
+                        <img src="/static/images/Emerald_JE3_BE3.png" alt="Emerald" width="20" height="20" class="emerald-icon">
+                        <span>${totalEmeralds} Em.</span>
                         <span>+</span>
-                        <img src="/static/images/Gold_Ingot_JE4_BE2.png" alt="Barra de Ouro" width="20" height="20" class="emerald-icon">
-                        <span>${totalGold} Ouro</span>
+                        <img src="/static/images/Gold_Ingot_JE4_BE2.png" alt="Gold Ingot" width="20" height="20" class="emerald-icon">
+                        <span>${totalGold} Gold</span>
                     `;
                 } else {
                     const showGoldEmpty = isNetherActive && totalEmeralds === 0;
                     cartTotalDisplay.innerHTML = `
-                        <img src="${showGoldEmpty ? '/static/images/Gold_Ingot_JE4_BE2.png' : '/static/images/Emerald_JE3_BE3.png'}" alt="${showGoldEmpty ? 'Barra de Ouro' : 'Esmeralda'}" width="20" height="20" class="emerald-icon">
-                        <span id="cart-total-value">${totalEmeralds}</span> ${showGoldEmpty ? 'Barras de Ouro' : 'Esmeraldas'}
+                        <img src="${showGoldEmpty ? '/static/images/Gold_Ingot_JE4_BE2.png' : '/static/images/Emerald_JE3_BE3.png'}" alt="${showGoldEmpty ? 'Gold Ingot' : 'Emerald'}" width="20" height="20" class="emerald-icon">
+                        <span id="cart-total-value">${totalEmeralds}</span> ${showGoldEmpty ? 'Gold Ingots' : 'Emeralds'}
                     `;
                 }
 
@@ -741,7 +782,7 @@
                             </div>
                             <div>
                                 <strong class="cart-item-title">${item.name}</strong>
-                                <span class="cart-item-meta">Stack máx: x${item.stack} (${stacksCount} slot${stacksCount > 1 ? 's' : ''}) · ${item.villagerName}</span>
+                                <span class="cart-item-meta">Max stack: x${item.stack} (${stacksCount} slot${stacksCount > 1 ? 's' : ''}) · ${item.villagerName}</span>
                             </div>
                         </div>
                         <div class="cart-item-right">
@@ -750,9 +791,9 @@
                                 ${item.price * item.qty} ${item.currencyShort}
                             </span>
                             <div class="qty-controls">
-                                <button type="button" class="mc-qty-btn" data-action="dec" data-index="${index}" title="Remover 1" aria-label="Diminuir quantidade">-</button>
-                                <button type="button" class="mc-qty-btn" data-action="inc" data-index="${index}" title="Adicionar 1" aria-label="Aumentar quantidade">+</button>
-                                <button type="button" class="mc-qty-btn mc-qty-remove" data-action="remove" data-index="${index}" title="Remover item" aria-label="Remover item">X</button>
+                                <button type="button" class="mc-qty-btn" data-action="dec" data-index="${index}" title="Remove 1" aria-label="Decrease quantity">-</button>
+                                <button type="button" class="mc-qty-btn" data-action="inc" data-index="${index}" title="Add 1" aria-label="Increase quantity">+</button>
+                                <button type="button" class="mc-qty-btn mc-qty-remove" data-action="remove" data-index="${index}" title="Remove item" aria-label="Remove item">X</button>
                             </div>
                         </div>
                     `;
@@ -787,7 +828,7 @@
                 modalItemImg.src = item.image;
                 modalItemImg.alt = item.name;
                 modalItemStack.textContent = `x${item.stack}`;
-                modalItemCategory.textContent = `${item.categoryName} · Stack máx: x${item.stack}`;
+                modalItemCategory.textContent = `${item.categoryName} · Max stack: x${item.stack}`;
                 modalItemName.textContent = item.name;
                 modalItemPrice.textContent = item.price;
                 modalItemCurrencyIcon.src = item.currencyIcon;
@@ -801,7 +842,7 @@
                 modalItemDelivery.textContent = item.delivery;
                 modalVillagerName.textContent = item.villagerName;
                 modalVillagerRole.textContent = item.villagerRole;
-                modalVisitVillagerBtn.textContent = `Ver Oficina de ${item.villagerName} →`;
+                modalVisitVillagerBtn.textContent = `Visit ${item.villagerName}'s Workshop →`;
                 itemModal.hidden = false;
             }
 
@@ -873,14 +914,14 @@
             document.getElementById('checkout-btn').addEventListener('click', () => {
                 if (cart.length === 0) {
                     playSound(SOUNDS.click);
-                    showToast('Adicione pelo menos 1 item ao Baú antes de negociar!');
+                    showToast('Add at least 1 item to the Chest before trading!');
                     return;
                 }
                 playSound(SOUNDS.levelUp);
                 cart.length = 0;
                 updateCartUI();
                 tradeFeedback.hidden = false;
-                showToast('Level Up! Troca concluída com o Aldeão!');
+                showToast('Level Up! Trade completed with the Villager!');
             });
 
             itemModal.addEventListener('click', (e) => {
@@ -894,6 +935,9 @@
                     closeCartModal();
                 }
             });
+
+            // Initialize default Overworld view on load
+            applyFiltersAndTheme();
         })();
     </script>
 </body>
