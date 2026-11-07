@@ -1,4 +1,4 @@
-/* Friendly Minecraft Village Market + Dimensions & Villager Workshops — CUSTOMIZE HERE */
+/* Friendly Minecraft Village Market + Fluid Responsive Design */
 :root {
     --background: #8cc8ff;
     --surface: #dedede;
@@ -21,7 +21,9 @@
     --font-pixel-body: "VT323", monospace;
 }
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -37,9 +39,17 @@
     clip: rect(0, 0, 0, 0);
 }
 
-/* Base Body & Dynamic Dimension / Villager Themes */
+html,
 body {
     margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Base Body & Dynamic Dimension / Villager Themes */
+body {
     min-height: 100vh;
     background-color: var(--background);
     background-image:
@@ -50,26 +60,44 @@ body {
     background-attachment: fixed;
     color: var(--text);
     font-family: var(--font-pixel-body), system-ui, monospace;
-    font-size: 1.3rem;
+    font-size: clamp(1.15rem, 1.5vw, 1.32rem);
     line-height: 1.35;
     overflow-wrap: anywhere;
     transition: background-color 0.25s ease;
 }
 
-/* Theme: Nether Dimension / Mercador Ignis */
+/* Theme: Nether Dimension */
 body.theme-nether {
-    background-color: #2b0909;
+    background-color: #1f1412;
     background-image:
-        linear-gradient(180deg, rgba(95, 12, 12, 0.72) 0%, rgba(38, 6, 18, 0.82) 100%),
-        url("/static/images/mine-background1.png");
+        linear-gradient(180deg, rgba(28, 12, 12, 0.18) 0%, rgba(20, 8, 8, 0.3) 100%),
+        url("/static/images/netherbg.png");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
-/* Theme: Ferreiro Gorak (Armorer Workshop) */
-body.theme-armeiro {
-    background-color: #3b322c;
+/* Theme: Mercador Ignis (Piglin) */
+body.theme-ignis {
+    background-color: #1f1412;
     background-image:
-        linear-gradient(180deg, rgba(70, 52, 38, 0.52) 0%, rgba(42, 35, 32, 0.62) 100%),
-        url("/static/images/mine-background1.png");
+        linear-gradient(180deg, rgba(28, 12, 12, 0.18) 0%, rgba(20, 8, 8, 0.3) 100%),
+        url("/static/images/piglinbg.png");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+}
+
+/* Theme: Ferreiro Gorak (Dark Armorer Forge Interior) */
+body.theme-armeiro {
+    background-color: #120c09;
+    background-image:
+        linear-gradient(180deg, rgba(10, 8, 7, 0.18) 0%, rgba(12, 9, 8, 0.32) 100%),
+        url("/static/images/ferraria4.png");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    color: #f0e4d6;
 }
 
 /* Theme: Aldeão Tobias (Farmer & Carpenter) */
@@ -84,24 +112,28 @@ body.theme-fazendeiro {
 body.theme-alquimista {
     background-color: #2e1d4a;
     background-image:
-        linear-gradient(180deg, rgba(74, 28, 120, 0.52) 0%, rgba(28, 18, 68, 0.62) 100%),
-        url("/static/images/mine-background1.png");
+        linear-gradient(180deg, rgba(28, 12, 48, 0.15) 0%, rgba(18, 8, 34, 0.28) 100%),
+        url("/static/images/clerigobg.png");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 .container {
-    width: min(100% - 2rem, 72rem);
+    width: min(100% - clamp(1rem, 4vw, 3rem), 76rem);
     margin-inline: auto;
 }
 
 h1, h2, h3 {
     font-family: var(--font-pixel-title), monospace;
     line-height: 1.35;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
 }
 
 /* Pixel Art Rendering for Sprites & Icons */
 .sprite-img,
 .emerald-icon,
+.villager-standing-img,
 .pixel-icon {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
@@ -112,7 +144,7 @@ h1, h2, h3 {
     position: sticky;
     top: 0;
     z-index: 80;
-    padding: 0.6rem 0;
+    padding: 0.55rem 0;
     background: #2b231b;
     border-bottom: 3px solid #000000;
     box-shadow:
@@ -125,35 +157,63 @@ body.theme-nether .mc-top-navbar {
     box-shadow: inset 0 2px 0 #6e1727, 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
+body.theme-armeiro .mc-top-navbar {
+    background: #17120f;
+    box-shadow: inset 0 2px 0 #382c25, 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
 .top-nav-inner {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: 0.6rem;
+}
+
+.nav-mobile-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.mobile-menu-toggle {
+    display: none;
+}
+
+.nav-collapsible {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+    flex: 1;
 }
 
 .nav-group {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.4rem;
+}
+
+.nav-btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .nav-group-label {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.55rem;
+    font-size: 0.52rem;
     color: #d8c8b4;
-    margin-right: 0.15rem;
+    margin-right: 0.1rem;
     text-transform: uppercase;
 }
 
 .dimension-switcher {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.35rem;
-    padding-left: 0.4rem;
+    padding-left: 0.5rem;
     border-left: 2px solid #59493a;
 }
 
@@ -162,18 +222,22 @@ body.theme-nether .mc-top-navbar {
 .villager-nav-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.45rem 0.65rem;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.48rem 0.7rem;
     background: #5e5246;
     color: #ffffff;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.56rem;
+    font-size: 0.55rem;
+    line-height: 1.3;
     border: 2px solid #000000;
     box-shadow:
         inset 2px 2px 0 #8a7968,
         inset -2px -2px 0 #383028;
     cursor: pointer;
     text-shadow: 1px 1px 0 #000000;
+    text-align: center;
+    min-width: 0;
 }
 
 .nav-btn:hover,
@@ -209,7 +273,7 @@ body.theme-nether .mc-top-navbar {
 
 /* Header with Minecraft Village Wallpaper */
 .header {
-    padding: 2.6rem 0;
+    padding: clamp(1.5rem, 3.5vw, 2.6rem) 0;
     background-image:
         linear-gradient(180deg, rgba(16, 28, 18, 0.45) 0%, rgba(20, 16, 12, 0.68) 100%),
         url("/static/images/minecraft-village-valley-4k-wallpaper.jpeg");
@@ -225,24 +289,46 @@ body.theme-nether .mc-top-navbar {
 
 body.theme-nether .header {
     background-image:
-        linear-gradient(180deg, rgba(110, 14, 14, 0.72) 0%, rgba(35, 5, 12, 0.88) 100%),
-        url("/static/images/minecraft-village-valley-4k-wallpaper.jpeg");
+        linear-gradient(180deg, rgba(35, 10, 10, 0.35) 0%, rgba(24, 6, 8, 0.65) 100%),
+        url("/static/images/netherbg2.png");
+    background-position: center center;
     box-shadow:
         inset 0 -5px 0 #4a0c0c,
-        inset 0 5px 0 rgba(255, 110, 64, 0.45),
+        inset 0 5px 0 rgba(255, 170, 50, 0.45),
+        0 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+body.theme-ignis .header {
+    background-image:
+        linear-gradient(180deg, rgba(35, 10, 10, 0.35) 0%, rgba(24, 6, 8, 0.65) 100%),
+        url("/static/images/piglin.png");
+    background-position: center 35%;
+    box-shadow:
+        inset 0 -5px 0 #4a0c0c,
+        inset 0 5px 0 rgba(255, 170, 50, 0.45),
         0 6px 14px rgba(0, 0, 0, 0.45);
 }
 
 body.theme-armeiro .header {
     background-image:
-        linear-gradient(180deg, rgba(64, 46, 32, 0.65) 0%, rgba(28, 22, 18, 0.82) 100%),
-        url("/static/images/minecraft-village-valley-4k-wallpaper.jpeg");
+        linear-gradient(180deg, rgba(14, 9, 6, 0.35) 0%, rgba(10, 6, 4, 0.62) 100%),
+        url("/static/images/ferraria.png");
+    background-position: center 45%;
+    box-shadow:
+        inset 0 -5px 0 #26160c,
+        inset 0 5px 0 rgba(255, 130, 40, 0.28),
+        0 6px 16px rgba(0, 0, 0, 0.65);
 }
 
 body.theme-alquimista .header {
     background-image:
-        linear-gradient(180deg, rgba(68, 22, 115, 0.65) 0%, rgba(24, 10, 48, 0.85) 100%),
-        url("/static/images/minecraft-village-valley-4k-wallpaper.jpeg");
+        linear-gradient(180deg, rgba(24, 14, 38, 0.35) 0%, rgba(18, 10, 30, 0.62) 100%),
+        url("/static/images/clerigo.png");
+    background-position: center 45%;
+    box-shadow:
+        inset 0 -5px 0 #31174d,
+        inset 0 5px 0 rgba(198, 130, 255, 0.35),
+        0 6px 16px rgba(0, 0, 0, 0.55);
 }
 
 .navbar {
@@ -250,22 +336,22 @@ body.theme-alquimista .header {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: 1.25rem;
 }
 
 .brand {
-    flex: 1;
-    min-width: min(100%, 20rem);
+    flex: 1 1 20rem;
+    min-width: 0;
 }
 
 .eyebrow {
     display: inline-block;
     margin: 0;
-    padding: 0.3rem 0.6rem;
+    padding: 0.28rem 0.55rem;
     background: rgba(20, 82, 34, 0.9);
     border: 2px solid #84f5a7;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.63rem;
+    font-size: clamp(0.5rem, 1.1vw, 0.63rem);
     color: #b4ffca;
     text-shadow: 2px 2px 0 #000;
 }
@@ -276,9 +362,15 @@ body.theme-nether .eyebrow {
     color: #ffe066;
 }
 
+body.theme-armeiro .eyebrow {
+    background: rgba(140, 62, 16, 0.92);
+    border-color: #ffbb55;
+    color: #ffe8b3;
+}
+
 h1 {
-    font-size: clamp(1.2rem, 3vw, 1.85rem);
-    margin: 0.65rem 0 0.5rem;
+    font-size: clamp(1rem, 2.6vw, 1.8rem);
+    margin: 0.55rem 0 0.45rem;
     color: #fff9d2;
     text-shadow: 3px 3px 0 #1c1208, 0 0 10px rgba(0, 0, 0, 0.6);
 }
@@ -286,7 +378,7 @@ h1 {
 .introduction {
     margin: 0;
     max-width: 42rem;
-    font-size: 1.4rem;
+    font-size: clamp(1.15rem, 2vw, 1.4rem);
     color: #ffffff;
     text-shadow: 2px 2px 0 #140d06;
 }
@@ -295,8 +387,8 @@ h1 {
 .chest-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.85rem;
-    padding: 0.7rem 1.05rem;
+    gap: 0.75rem;
+    padding: 0.65rem 0.95rem;
     background: var(--surface-warm);
     color: var(--text);
     border: 3px solid var(--outline-black);
@@ -307,6 +399,7 @@ h1 {
     cursor: pointer;
     font-family: var(--font-pixel-body), monospace;
     transition: transform 0.08s ease;
+    flex-shrink: 0;
 }
 
 .chest-btn:hover {
@@ -323,8 +416,8 @@ h1 {
 
 .chest-slot {
     position: relative;
-    width: 54px;
-    height: 54px;
+    width: 50px;
+    height: 50px;
     display: grid;
     place-items: center;
     background: var(--slot-bg);
@@ -332,6 +425,7 @@ h1 {
     box-shadow:
         inset 2px 2px 0 #262626,
         inset -2px -2px 0 var(--border-light);
+    flex-shrink: 0;
 }
 
 .chest-info {
@@ -343,7 +437,7 @@ h1 {
 
 .chest-label {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     color: #3d2814;
     margin-bottom: 0.25rem;
 }
@@ -353,81 +447,145 @@ h1 {
     align-items: center;
     gap: 0.35rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--accent-dark);
 }
 
 /* Main Content */
 main {
-    padding-block: 1.85rem 2.75rem;
+    padding-block: clamp(1.2rem, 3vw, 2rem) 2.75rem;
 }
 
 /* Villager Profile Card / Workshop Banner */
 .villager-profile-card {
     margin-bottom: 1.5rem;
-    padding: 1.35rem;
-    background: var(--surface-warm);
+    padding: clamp(1rem, 2.5vw, 1.4rem);
+    background: rgba(247, 234, 210, 0.94);
     border: 4px solid var(--outline-black);
     box-shadow:
         inset 4px 4px 0 #ffffff,
         inset -4px -4px 0 #bfa57e,
-        0 6px 0 rgba(0, 0, 0, 0.28);
+        0 8px 18px rgba(0, 0, 0, 0.38);
+}
+
+body.theme-armeiro .villager-profile-card {
+    background: rgba(42, 31, 24, 0.96);
+    color: #fff5e6;
+    border: 3px solid #ff9d3b;
+    box-shadow:
+        0 0 0 3px #0d0907,
+        inset 4px 4px 0 #6e523e,
+        inset -4px -4px 0 #1f150f,
+        0 10px 26px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-armeiro .villager-character-stage {
+    background: radial-gradient(circle, rgba(255, 166, 77, 0.35) 0%, rgba(28, 18, 12, 0.85) 80%);
+    border-color: #d97b24;
 }
 
 body.theme-nether .villager-profile-card {
     background: #38141c;
     color: #fff2e6;
+    border-color: #ffaa22;
     box-shadow:
+        0 0 0 3px #120608,
         inset 4px 4px 0 #6e2836,
         inset -4px -4px 0 #1f080d,
-        0 6px 0 rgba(0, 0, 0, 0.45);
+        0 10px 24px rgba(0, 0, 0, 0.75);
+}
+
+body.theme-nether .villager-character-stage {
+    background: radial-gradient(circle, rgba(255, 190, 50, 0.35) 0%, rgba(45, 12, 18, 0.88) 80%);
+    border-color: #ffaa22;
+}
+
+.villager-profile-layout {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+/* Left Stage for the Villager Character Image */
+.villager-character-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 135px;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 3px solid var(--outline-black);
+    box-shadow:
+        inset 3px 3px 0 rgba(0, 0, 0, 0.45),
+        inset -3px -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+.villager-standing-img {
+    display: block;
+    width: auto;
+    height: clamp(135px, 18vw, 185px);
+    object-fit: contain;
+    filter: drop-shadow(-4px 6px 0 rgba(0, 0, 0, 0.5));
+}
+
+.villager-standing-img.face-right {
+    transform: scaleX(-1);
+}
+
+.villager-profile-details {
+    min-width: 0;
 }
 
 .villager-profile-top {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.9rem;
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
 }
 
 .villager-avatar-box {
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
     display: grid;
     place-items: center;
-    font-size: 2.4rem;
+    font-size: 2.5rem;
     background: var(--slot-bg);
     border: 3px solid var(--outline-black);
     box-shadow:
         inset 3px 3px 0 var(--border-slot-dark),
         inset -3px -3px 0 var(--border-light);
-    flex-shrink: 0;
 }
 
 .villager-profile-main {
-    flex: 1;
-    min-width: min(100%, 16rem);
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .villager-badges {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem;
+    gap: 0.4rem;
     margin-bottom: 0.35rem;
 }
 
 .vp-badge {
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem 0.45rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.55rem;
+    font-size: clamp(0.48rem, 0.9vw, 0.55rem);
     border: 2px solid #000000;
 }
 
 .vp-level {
     background: #17dd62;
     color: #063b16;
+}
+
+body.theme-nether .vp-level {
+    background: #ffbf1c;
+    color: #381e00;
 }
 
 .vp-dimension {
@@ -437,27 +595,34 @@ body.theme-nether .villager-profile-card {
 
 .villager-profile-main h2 {
     margin: 0 0 0.2rem;
-    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    font-size: clamp(0.9rem, 2vw, 1.3rem);
 }
 
 .vp-role {
     margin: 0;
-    font-size: 1.3rem;
+    font-size: clamp(1.15rem, 1.8vw, 1.3rem);
     font-weight: 700;
     color: #6e4511;
 }
 
+body.theme-armeiro .vp-role,
 body.theme-nether .vp-role {
-    color: #ffaa44;
+    color: #ffbb55;
 }
 
 .vp-quote {
-    margin: 0 0 1rem;
-    padding: 0.75rem 1rem;
+    margin: 0 0 0.9rem;
+    padding: 0.7rem 0.95rem;
     background: rgba(0, 0, 0, 0.07);
     border-left: 4px solid #279942;
-    font-size: 1.35rem;
+    font-size: clamp(1.15rem, 1.8vw, 1.35rem);
     font-style: italic;
+}
+
+body.theme-armeiro .vp-quote {
+    background: rgba(0, 0, 0, 0.32);
+    border-left-color: #ff9933;
+    color: #ffe8cc;
 }
 
 body.theme-nether .vp-quote {
@@ -467,14 +632,20 @@ body.theme-nether .vp-quote {
 
 .villager-profile-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.7rem;
 }
 
 .vp-stat-box {
-    padding: 0.6rem 0.85rem;
+    padding: 0.55rem 0.8rem;
     background: rgba(255, 255, 255, 0.55);
     border: 2px solid #8c6b48;
+    min-width: 0;
+}
+
+body.theme-armeiro .vp-stat-box {
+    background: rgba(0, 0, 0, 0.35);
+    border-color: #9e6b43;
 }
 
 body.theme-nether .vp-stat-box {
@@ -485,19 +656,20 @@ body.theme-nether .vp-stat-box {
 .vp-stat-label {
     display: block;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.55rem;
+    font-size: 0.52rem;
     color: #5c4938;
     margin-bottom: 0.2rem;
 }
 
+body.theme-armeiro .vp-stat-label,
 body.theme-nether .vp-stat-label {
-    color: #f0b499;
+    color: #ffcc99;
 }
 
 /* Section Heading & Category Filter Slots */
 .section-heading {
-    margin-bottom: 1.6rem;
-    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding: clamp(0.95rem, 2.2vw, 1.25rem);
     background: rgba(235, 235, 235, 0.95);
     border: 3px solid var(--outline-black);
     box-shadow:
@@ -506,39 +678,61 @@ body.theme-nether .vp-stat-label {
         0 4px 0 rgba(0, 0, 0, 0.22);
 }
 
+body.theme-armeiro .section-heading {
+    background: rgba(235, 225, 212, 0.97);
+    color: #241a12;
+    border: 3px solid #120c08;
+    box-shadow:
+        0 0 0 2px #b86b28,
+        inset 4px 4px 0 #ffffff,
+        inset -4px -4px 0 #9e8c7a,
+        0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
 .inventory-bar h2 {
     margin: 0 0 0.35rem;
-    font-size: clamp(0.95rem, 2.1vw, 1.3rem);
+    font-size: clamp(0.85rem, 2vw, 1.25rem);
     color: var(--text);
 }
 
+body.theme-armeiro .inventory-bar h2 {
+    color: #2b1b0e;
+}
+
 .inventory-bar p {
-    margin: 0 0 1rem;
+    margin: 0 0 0.95rem;
     color: var(--muted-text);
-    font-size: 1.3rem;
+    font-size: clamp(1.15rem, 1.6vw, 1.3rem);
+}
+
+body.theme-armeiro .inventory-bar p {
+    color: #4f3b2a;
 }
 
 .category-slots {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.55rem;
 }
 
 .slot-tab {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 1rem;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.65rem;
     background: var(--slot-bg);
     color: #ffffff;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.64rem;
+    font-size: clamp(0.5rem, 0.8vw, 0.62rem);
     text-shadow: 2px 2px 0 #000000;
     border: 2px solid var(--outline-black);
     box-shadow:
         inset 2px 2px 0 var(--border-slot-dark),
         inset -2px -2px 0 var(--border-light);
     cursor: pointer;
+    text-align: center;
+    min-width: 0;
 }
 
 .slot-tab:hover {
@@ -558,11 +752,11 @@ body.theme-nether .vp-stat-label {
     color: #e6e6e6;
 }
 
-/* Products Grid */
+/* Products Grid — Responsive Columns (3 Desktop -> 2 Tablet -> 1 Mobile) */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.45rem);
 }
 
 /* Minecraft Inventory Card */
@@ -581,33 +775,61 @@ body.theme-nether .vp-stat-label {
     transform: translateY(-3px);
 }
 
+body.theme-armeiro .card {
+    background: #ece3d8;
+    color: #211811;
+    border: 3px solid #120c08;
+    box-shadow:
+        0 0 0 2px #c47229,
+        inset 4px 4px 0 #ffffff,
+        inset -4px -4px 0 #a39281,
+        0 10px 24px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-armeiro .card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 0 0 3px #ff9d3b,
+        inset 4px 4px 0 #ffffff,
+        inset -4px -4px 0 #a39281,
+        0 12px 28px rgba(255, 136, 0, 0.35);
+}
+
 .card-inner {
     display: flex;
     flex-direction: column;
     height: 100%;
-    padding: 1.05rem;
+    padding: clamp(0.85rem, 1.8vw, 1.05rem);
+    min-width: 0;
 }
 
 .card-top-bar {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 0.4rem;
-    margin-bottom: 0.7rem;
+    gap: 0.35rem;
+    margin-bottom: 0.65rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.54rem;
+    font-size: clamp(0.46rem, 0.7vw, 0.53rem);
     color: var(--muted-text);
 }
 
 .category-tag {
     background: var(--surface-warm);
     color: #4f3216;
-    padding: 0.25rem 0.5rem;
+    padding: 0.22rem 0.45rem;
     border: 2px solid #8c6b48;
 }
 
+body.theme-armeiro .category-tag {
+    background: #3b2414;
+    color: #ffd280;
+    border-color: #b86b28;
+}
+
 .dimension-tag {
-    padding: 0.22rem 0.45rem;
+    padding: 0.2rem 0.4rem;
     border: 2px solid #3d6e29;
     background: #d9f5d0;
     color: #1c4d11;
@@ -623,10 +845,10 @@ body.theme-nether .vp-stat-label {
 .sprite-slot {
     position: relative;
     width: 100%;
-    max-width: 175px;
+    max-width: clamp(135px, 16vw, 170px);
     aspect-ratio: 1 / 1;
-    margin: 0 auto 1rem;
-    padding: 1.1rem;
+    margin: 0 auto 0.9rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -642,6 +864,19 @@ body.theme-nether .vp-stat-label {
     background: var(--slot-hover);
 }
 
+body.theme-armeiro .sprite-slot {
+    background: radial-gradient(circle, #fff3db 0%, #d4be9e 70%, #a88f70 100%);
+    border: 3px solid #2b1b0e;
+    box-shadow:
+        inset 4px 4px 0 #7a6348,
+        inset -4px -4px 0 #fff9ed,
+        0 0 12px rgba(255, 162, 64, 0.35);
+}
+
+body.theme-armeiro .sprite-slot:hover {
+    background: radial-gradient(circle, #ffffff 0%, #e3ceaf 70%, #b89e7d 100%);
+}
+
 .card .sprite-img,
 .sprite-img {
     display: block;
@@ -652,13 +887,17 @@ body.theme-nether .vp-stat-label {
     filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, 0.35));
 }
 
+body.theme-armeiro .card .sprite-img {
+    filter: drop-shadow(4px 4px 0 rgba(0, 0, 0, 0.45));
+}
+
 /* Stack Limit Badge (x1 or x64) */
 .stack-badge {
     position: absolute;
     right: 6px;
     bottom: 4px;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.68rem;
+    font-size: 0.64rem;
     color: #ffffff;
     text-shadow: 2px 2px 0 #000000;
     pointer-events: none;
@@ -668,23 +907,29 @@ body.theme-nether .vp-stat-label {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
 }
 
 .card h3 {
-    margin: 0 0 0.5rem;
-    font-size: 0.9rem;
+    margin: 0 0 0.45rem;
+    font-size: clamp(0.76rem, 1.15vw, 0.9rem);
     color: #1c1610;
+}
+
+body.theme-armeiro .card h3 {
+    color: #1f140c;
 }
 
 .stat-pill {
     display: inline-block;
     align-self: flex-start;
-    margin-bottom: 0.55rem;
-    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.5rem;
+    padding: 0.18rem 0.55rem;
     background: #241033;
     color: #70ffff;
     border: 2px solid #6b2cf5;
-    font-size: 1.15rem;
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    max-width: 100%;
 }
 
 .stat-label {
@@ -694,23 +939,30 @@ body.theme-nether .vp-stat-label {
 .description {
     margin: 0 0 0.65rem;
     color: var(--muted-text);
-    font-size: 1.22rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.22rem);
+}
+
+body.theme-armeiro .description,
+body.theme-armeiro .delivery,
+body.theme-armeiro .card-top-bar {
+    color: #4a3828;
 }
 
 /* Clickable Villager Craftsman Chip on Card */
 .card-villager-chip {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.4rem;
+    gap: 0.35rem;
     width: 100%;
     margin-bottom: 0.65rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.4rem 0.55rem;
     background: var(--surface-warm);
     color: #3d2814;
     border: 2px solid #8c6b48;
     font-family: var(--font-pixel-body), monospace;
-    font-size: 1.12rem;
+    font-size: 1.1rem;
     cursor: pointer;
     text-align: left;
 }
@@ -720,34 +972,68 @@ body.theme-nether .vp-stat-label {
     border-color: #4f3216;
 }
 
+body.theme-armeiro .card-villager-chip {
+    background: #f7e6cc;
+    color: #36200d;
+    border-color: #9e632b;
+}
+
 .chip-arrow {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.52rem;
+    font-size: 0.5rem;
     color: #097a30;
+}
+
+body.theme-armeiro .card-villager-chip .chip-arrow {
+    color: #b35300;
 }
 
 /* Price Section */
 .price-box {
     display: flex;
-    align-items: baseline;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.55rem 0.75rem;
+    gap: 0.4rem;
+    padding: 0.5rem 0.65rem;
     margin-top: auto;
     background: #e9f7ec;
     border: 2px solid #358f4d;
     box-shadow: inset 2px 2px 0 #ffffff;
 }
 
+body.theme-armeiro .price-box {
+    background: #dff5e4;
+    border-color: #238039;
+}
+
+.price-box.price-box-gold {
+    background: #fff5d6;
+    border-color: #c4881b;
+    box-shadow: inset 2px 2px 0 #ffffff;
+}
+
+.price-box.price-box-gold .emerald-amount {
+    color: #8f5600;
+}
+
+.price-box.price-box-gold .emerald-unit {
+    color: #6e4200;
+}
+
+.price-box.price-box-gold .price {
+    color: #7d6238;
+}
+
 .emerald-price {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
 }
 
 .emerald-amount {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.98rem;
+    font-size: clamp(0.82rem, 1.2vw, 0.96rem);
     color: var(--accent-dark);
 }
 
@@ -758,30 +1044,34 @@ body.theme-nether .vp-stat-label {
 
 .price {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1rem;
     color: #4f6955;
 }
 
 .delivery {
-    margin: 0.6rem 0;
-    padding-top: 0.5rem;
+    margin: 0.55rem 0;
+    padding-top: 0.45rem;
     border-top: 2px dashed #b5b5b5;
     color: var(--muted-text);
-    font-size: 1.12rem;
+    font-size: 1.08rem;
+}
+
+body.theme-armeiro .delivery {
+    border-top-color: #b5a392;
 }
 
 /* Minecraft Beveled Buttons */
 .card-actions {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.5rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.45rem;
     margin-top: 0.25rem;
 }
 
 .mc-btn {
-    padding: 0.62rem 0.75rem;
+    padding: 0.58rem 0.65rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.6rem;
+    font-size: clamp(0.5rem, 0.75vw, 0.58rem);
     line-height: 1.3;
     text-align: center;
     color: #ffffff;
@@ -792,6 +1082,7 @@ body.theme-nether .vp-stat-label {
         inset 2px 2px 0 #b8b8b8,
         inset -2px -2px 0 #474747;
     cursor: pointer;
+    min-width: 0;
 }
 
 .mc-btn:hover {
@@ -835,15 +1126,17 @@ body.theme-nether .vp-stat-label {
     z-index: 100;
     display: grid;
     place-items: center;
-    padding: 1rem;
-    background: rgba(18, 32, 16, 0.65);
+    padding: 0.85rem;
+    background: rgba(18, 32, 16, 0.68);
     backdrop-filter: blur(2px);
 }
 
 /* Item Details Modal — Enchanted Tooltip */
 .mc-tooltip-modal {
     width: min(100%, 34rem);
-    padding: 1.25rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: clamp(0.95rem, 2.5vw, 1.25rem);
     background: var(--tooltip-bg);
     color: #ffffff;
     border: 3px solid var(--tooltip-border);
@@ -856,31 +1149,32 @@ body.theme-nether .vp-stat-label {
 .mc-tooltip-header {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.85rem;
+    margin-bottom: 0.9rem;
 }
 
 .modal-slot {
-    width: 86px;
-    height: 86px;
+    width: 80px;
+    height: 80px;
     margin: 0;
-    padding: 0.6rem;
+    padding: 0.55rem;
     flex-shrink: 0;
 }
 
 .mc-tooltip-title-group {
     flex: 1;
+    min-width: 0;
 }
 
 .mc-tooltip-category {
     display: block;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: #c8bfe0;
 }
 
 .mc-tooltip-title-group h3 {
-    margin: 0.25rem 0 0.4rem;
-    font-size: 1rem;
+    margin: 0.2rem 0 0.35rem;
+    font-size: clamp(0.82rem, 1.6vw, 1rem);
     color: #66ffff;
     text-shadow: 2px 2px 0 #000000;
 }
@@ -890,39 +1184,44 @@ body.theme-nether .vp-stat-label {
     align-items: center;
     gap: 0.35rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--accent);
+}
+
+.mc-tooltip-price.modal-price-gold {
+    color: #ffcc33;
 }
 
 .mc-close-btn {
     padding: 0.35rem 0.6rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     background: #b83232;
     color: #ffffff;
     border: 2px solid #000000;
     box-shadow: inset 2px 2px 0 #eb6b6b, inset -2px -2px 0 #661818;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .mc-tooltip-body {
     border-top: 2px solid #3c1296;
     border-bottom: 2px solid #3c1296;
-    padding: 0.85rem 0;
-    margin-bottom: 1rem;
+    padding: 0.8rem 0;
+    margin-bottom: 0.95rem;
 }
 
 .mc-stat-highlight {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     color: #66ff66;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.35rem;
 }
 
 .mc-lore-text {
     margin: 0.35rem 0;
     color: var(--enchant-text);
     font-style: italic;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
 }
 
 .mc-desc-text {
@@ -931,9 +1230,9 @@ body.theme-nether .vp-stat-label {
 }
 
 .mc-delivery-text {
-    margin: 0.5rem 0 0.85rem;
+    margin: 0.45rem 0 0.8rem;
     color: var(--gold-text);
-    font-size: 1.15rem;
+    font-size: 1.12rem;
 }
 
 /* Villager Box inside Item Details Modal */
@@ -942,8 +1241,8 @@ body.theme-nether .vp-stat-label {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.75rem;
+    gap: 0.65rem;
+    padding: 0.7rem;
     background: rgba(255, 255, 255, 0.08);
     border: 2px solid #8a5cf5;
 }
@@ -951,36 +1250,40 @@ body.theme-nether .vp-stat-label {
 .modal-villager-info {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .modal-villager-eyebrow {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.5rem;
+    font-size: 0.48rem;
     color: #b4a2d9;
     margin-bottom: 0.2rem;
 }
 
 .modal-villager-info strong {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #ffdd66;
 }
 
 .modal-villager-info span {
     color: #e2d9f3;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
 }
 
 .mc-tooltip-footer {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 0.75rem;
+    gap: 0.6rem;
 }
 
 /* Chest Cart Window */
 .mc-inventory-window {
     width: min(100%, 37rem);
-    padding: 1.25rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: clamp(0.95rem, 2.5vw, 1.25rem);
     background: var(--surface-warm);
     color: var(--text);
     border: 4px solid var(--outline-black);
@@ -994,23 +1297,25 @@ body.theme-nether .vp-stat-label {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    gap: 0.5rem;
+    margin-bottom: 0.95rem;
 }
 
 .mc-window-title {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
+    min-width: 0;
 }
 
 .mc-window-title h3 {
     margin: 0;
-    font-size: 0.88rem;
+    font-size: clamp(0.72rem, 1.5vw, 0.88rem);
     color: #3d2814;
 }
 
 .cart-empty {
-    padding: 1.5rem;
+    padding: 1.35rem;
     text-align: center;
     background: var(--slot-bg);
     color: #ffffff;
@@ -1020,26 +1325,27 @@ body.theme-nether .vp-stat-label {
 
 .cart-hint {
     color: #f0f0f0;
-    font-size: 1.15rem;
+    font-size: 1.12rem;
 }
 
 .cart-item-list {
     list-style: none;
     padding: 0;
     margin: 0 0 1rem;
-    max-height: 18rem;
+    max-height: 17rem;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.55rem;
 }
 
 .cart-item-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.55rem 0.75rem;
+    gap: 0.65rem;
+    padding: 0.5rem 0.65rem;
     background: #e6d7be;
     border: 2px solid #8c6b48;
 }
@@ -1047,37 +1353,40 @@ body.theme-nether .vp-stat-label {
 .cart-item-left {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
+    min-width: 0;
+    flex: 1 1 12rem;
 }
 
 .small-slot {
-    width: 54px;
-    height: 54px;
+    width: 50px;
+    height: 50px;
     margin: 0;
-    padding: 0.35rem;
+    padding: 0.3rem;
     flex-shrink: 0;
 }
 
 .cart-item-title {
     display: block;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.68rem;
+    font-size: 0.64rem;
 }
 
 .cart-item-meta {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: var(--muted-text);
 }
 
 .cart-item-right {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
+    margin-left: auto;
 }
 
 .cart-item-subtotal {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--accent-dark);
 }
 
@@ -1090,7 +1399,7 @@ body.theme-nether .vp-stat-label {
     width: 28px;
     height: 28px;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.68rem;
+    font-size: 0.66rem;
     background: #787878;
     color: #ffffff;
     border: 2px solid #000000;
@@ -1111,7 +1420,7 @@ body.theme-nether .vp-stat-label {
 
 .trade-banner {
     margin-top: 0.75rem;
-    padding: 0.9rem;
+    padding: 0.85rem;
     background: #1e6b30;
     color: #ffffff;
     border: 3px solid #17dd62;
@@ -1120,7 +1429,7 @@ body.theme-nether .vp-stat-label {
 
 .trade-banner strong {
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: #ffff66;
 }
 
@@ -1130,53 +1439,56 @@ body.theme-nether .vp-stat-label {
 
 .mc-window-footer {
     border-top: 2px solid #bfa57e;
-    padding-top: 1rem;
-    margin-top: 1rem;
+    padding-top: 0.9rem;
+    margin-top: 0.9rem;
 }
 
 .cart-summary {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.85rem;
-    font-size: 1.35rem;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.3rem;
 }
 
 .cart-total-emeralds {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     color: var(--accent-dark);
 }
 
 .cart-footer-actions {
     display: flex;
+    flex-wrap: wrap;
     justify-content: flex-end;
-    gap: 0.65rem;
+    gap: 0.55rem;
 }
 
 /* Toast Notification */
 .mc-toast {
     position: fixed;
-    right: 1.25rem;
-    bottom: 1.25rem;
+    right: 1rem;
+    bottom: 1rem;
     z-index: 120;
-    padding: 0.8rem 1.05rem;
+    padding: 0.75rem 0.95rem;
     background: #1e6b30;
     color: #ffff66;
     border: 3px solid #17dd62;
     box-shadow: 0 4px 0 #000000;
     font-family: var(--font-pixel-title), monospace;
-    font-size: 0.66rem;
+    font-size: 0.62rem;
 }
 
 /* Footer */
 .footer {
     margin-top: 1rem;
     margin-bottom: 1.5rem;
-    padding: 1.1rem 1.5rem;
+    padding: 1rem 1.25rem;
     background: rgba(247, 234, 210, 0.94);
     border: 3px solid var(--outline-black);
     box-shadow: inset 3px 3px 0 #ffffff, inset -3px -3px 0 #bfa57e;
@@ -1185,15 +1497,254 @@ body.theme-nether .vp-stat-label {
     font-weight: 700;
 }
 
-@media (max-width: 600px) {
+body.theme-armeiro .footer {
+    background: rgba(236, 227, 216, 0.96);
+    color: #2b1b0e;
+    box-shadow: 0 0 0 2px #b86b28, inset 3px 3px 0 #ffffff, inset -3px -3px 0 #a39281;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Hamburger Menu & 2-Column Layout (<= 1180px) */
+@media (max-width: 1180px) {
+    .top-nav-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .nav-mobile-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .mobile-menu-toggle {
+        display: inline-flex;
+        background: #3d9942;
+        box-shadow: inset 2px 2px 0 #7be381, inset -2px -2px 0 #1f5c23;
+        padding: 0.55rem 0.8rem;
+        font-size: 0.58rem;
+    }
+
+    .nav-collapsible {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+        width: 100%;
+        margin-top: 0.6rem;
+        padding: 0.85rem;
+        background: rgba(18, 14, 10, 0.96);
+        border: 2px solid #000000;
+        box-shadow:
+            inset 2px 2px 0 #4d3e31,
+            inset -2px -2px 0 #120d09,
+            0 6px 14px rgba(0, 0, 0, 0.45);
+    }
+
+    .nav-collapsible.is-open {
+        display: flex;
+    }
+
+    .dimension-switcher {
+        padding-left: 0;
+        border-left: none;
+    }
+
+    .nav-group {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        width: 100%;
+    }
+
+    .nav-group-label {
+        font-size: 0.56rem;
+        color: #ffdd77;
+        margin: 0;
+    }
+
+    /* 3 equal columns for the 3 Dimension buttons */
+    .dimension-switcher .nav-btn-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+        width: 100%;
+    }
+
+    /* 3 equal columns for the 3 Villager buttons */
+    .villager-nav-group .nav-btn-row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.45rem;
+        width: 100%;
+    }
+
+    .dim-btn,
+    .villager-nav-btn {
+        width: 100%;
+        padding: 0.65rem 0.6rem;
+        font-size: 0.58rem;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .category-slots {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Mobile Screens (<= 680px): 1-Column Grid + Stacked Hamburger Buttons */
+@media (max-width: 680px) {
+    body,
+    body.theme-armeiro,
+    body.theme-nether,
+    body.theme-fazendeiro,
+    body.theme-alquimista {
+        background-attachment: scroll;
+    }
+
+    .grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Stack Villager buttons into 1 full-width column inside hamburger menu */
+    .villager-nav-group .nav-btn-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .villager-nav-btn {
+        justify-content: flex-start;
+        padding: 0.7rem 0.85rem;
+        text-align: left;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.9rem;
+    }
+
+    .brand {
+        flex: 1 1 auto;
+    }
+
+    .chest-btn {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .villager-profile-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.9rem;
+    }
+
+    .villager-character-stage {
+        width: 130px;
+        margin: 0 auto;
+        padding: 0.6rem;
+    }
+
+    .villager-profile-top {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+        text-align: center;
+    }
+
+    .villager-badges {
+        justify-content: center;
+    }
+
+    .villager-profile-top .mc-btn {
+        width: 100%;
+    }
+
+    .villager-profile-stats {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
     .card-actions {
         grid-template-columns: 1fr;
     }
+
+    .mc-toast {
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: 0.75rem;
+        text-align: center;
+    }
+}
+
+/* Small Phones (<= 500px): Stack Dimension Buttons & Category Slots in 1 Column */
+@media (max-width: 500px) {
+    .nav-mobile-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .nav-mobile-bar .nav-btn {
+        width: 100%;
+        padding: 0.65rem;
+    }
+
+    .dimension-switcher .nav-btn-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dim-btn {
+        justify-content: flex-start;
+        padding: 0.7rem 0.85rem;
+        text-align: left;
+    }
+
+    .category-slots {
+        grid-template-columns: 1fr;
+    }
+
+    .mc-tooltip-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .modal-villager-box,
+    .mc-tooltip-footer,
     .cart-footer-actions {
         flex-direction: column;
+        align-items: stretch;
     }
-    .dimension-switcher {
-        border-left: none;
-        padding-left: 0;
+
+    .modal-villager-box .mc-btn,
+    .mc-tooltip-footer .mc-btn,
+    .cart-footer-actions .mc-btn {
+        width: 100%;
+    }
+
+    .cart-item-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cart-item-left {
+        flex: 1 1 auto;
+    }
+
+    .cart-item-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 0.4rem;
+        border-top: 1px dashed #bfa57e;
     }
 }
