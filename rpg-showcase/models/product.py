@@ -46,7 +46,6 @@ class Product(ABC):
     def price(self, value):
         if value < 0:
             raise ValueError("The price cannot be negative.")
-        # _price is internal by convention; the underscore does not block access.
         self._price = value
 
     def formatted_price(self):

@@ -334,11 +334,6 @@
                 </div>
 
                 <ul class="cart-item-list" id="cart-items-list" hidden></ul>
-
-                <div class="trade-banner" id="trade-feedback" hidden>
-                    <strong>Trade completed successfully! (Level Up!)</strong>
-                    <p>Your currency was exchanged and the items were sent to your inventory!</p>
-                </div>
             </div>
 
             <div class="mc-window-footer">
@@ -350,8 +345,8 @@
                     </strong>
                 </div>
                 <div class="cart-footer-actions">
-                    <button type="button" class="mc-btn mc-btn-secondary" id="clear-cart-btn">Empty Chest</button>
-                    <button type="button" class="mc-btn mc-btn-emerald" id="checkout-btn">
+                    <button type="button" class="mc-btn mc-btn-secondary" id="clear-cart-btn" disabled>Empty Chest</button>
+                    <button type="button" class="mc-btn mc-btn-emerald" id="checkout-btn" disabled>
                         Trade with Villager
                     </button>
                 </div>
@@ -466,7 +461,8 @@
             const cartModal = document.getElementById('cart-modal');
             const cartEmptyState = document.getElementById('cart-empty-state');
             const cartItemsList = document.getElementById('cart-items-list');
-            const tradeFeedback = document.getElementById('trade-feedback');
+            const clearCartBtn = document.getElementById('clear-cart-btn');
+            const checkoutBtn = document.getElementById('checkout-btn');
             const toastEl = document.getElementById('mc-toast');
             let toastTimer = null;
 
@@ -690,7 +686,6 @@
 
             function addToCart(item) {
                 playSound(SOUNDS.click);
-                tradeFeedback.hidden = true;
                 const existing = cart.find((entry) => entry.id === item.id);
                 if (existing) {
                     existing.qty += 1;
@@ -703,6 +698,9 @@
 
             function updateCartUI() {
                 const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+                const isCartEmpty = cart.length === 0;
+                clearCartBtn.disabled = isCartEmpty;
+                checkoutBtn.disabled = isCartEmpty;
                 const totalEmeralds = cart
                     .filter((item) => item.dimension !== 'nether')
                     .reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -899,29 +897,23 @@
 
             document.getElementById('open-cart-btn').addEventListener('click', () => {
                 playSound(SOUNDS.chestOpen);
-                tradeFeedback.hidden = true;
                 cartModal.hidden = false;
             });
             document.getElementById('close-cart-modal').addEventListener('click', () => {
                 closeCartModal();
             });
-            document.getElementById('clear-cart-btn').addEventListener('click', () => {
+            clearCartBtn.addEventListener('click', () => {
+                if (cart.length === 0) return;
                 playSound(SOUNDS.click);
                 cart.length = 0;
-                tradeFeedback.hidden = true;
                 updateCartUI();
             });
-            document.getElementById('checkout-btn').addEventListener('click', () => {
-                if (cart.length === 0) {
-                    playSound(SOUNDS.click);
-                    showToast('Add at least 1 item to the Chest before trading!');
-                    return;
-                }
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) return;
                 playSound(SOUNDS.levelUp);
                 cart.length = 0;
                 updateCartUI();
-                tradeFeedback.hidden = false;
-                showToast('Level Up! Trade completed with the Villager!');
+                showToast('Trade completed with the Villager!');
             });
 
             itemModal.addEventListener('click', (e) => {
